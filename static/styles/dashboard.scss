@@ -1,0 +1,2173 @@
+@font-face {
+  font-family: "Roobert";
+  src: url(./RoobertPRO-Light.woff2) format("woff2");
+  font-style: normal;
+  font-weight: 300; // Light
+}
+
+@font-face {
+  font-family: "Roobert";
+  src: url(./RoobertPRO-Regular.woff2) format("woff2");
+  font-style: normal;
+  font-weight: 400; // Normal
+}
+
+@font-face {
+  font-family: "Roobert";
+  src: url(./RoobertPRO-Medium.woff2) format("woff2");
+  font-style: normal;
+  font-weight: 500; // Medium
+}
+
+//   @font-face {
+//     font-family: 'Roobert';
+//     src: url(./assets/fonts/Roobert/Roobert-SemiBold.woff2) format('woff2');
+//     font-style: normal;
+//     font-weight: 600; // Semibold
+//   }
+
+@font-face {
+  font-family: "Roobert";
+  src: url(./RoobertPRO-Bold.woff2) format("woff2");
+  font-style: normal;
+  font-weight: 700; // Bold
+}
+
+@import "./mixin";
+
+$primaryColor: #0056b3;
+$defaultColor: #007bff;
+$try: #4ea7ec;
+
+$aColor: #333;
+$borderColor: #00346b;
+
+// @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+  font-family: "Roobert", sans-serif;
+
+  a {
+    color: $try;
+    text-decoration: none;
+  }
+}
+body {
+  padding: 0;
+  margin: 0;
+
+  background-color: #f1f8ff;
+
+  .container {
+    display: grid;
+    grid-template-columns: 270px auto;
+
+    @include mobile() {
+      grid-template-columns: 1fr;
+      position: relative;
+    }
+
+    aside {
+      background-color: #00346b;
+      padding: 20px 4%;
+      height: calc(100vh - 40px);
+
+      transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+      @include mobile() {
+        position: absolute;
+        padding: 20px 3%;
+        left: -100%;
+        top: 0;
+        z-index: 100;
+        width: 94%;
+        max-width: 300px;
+      }
+
+      @include phone() {
+        padding: 14px 2%;
+      }
+
+      .mobile-close {
+        display: none;
+        margin-bottom: 10px;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        @include mobile() {
+          display: flex;
+
+          justify-content: flex-end;
+          align-items: center;
+        }
+
+        svg {
+          width: 20px;
+          stroke: rgb(220, 64, 64);
+
+          @include phone() {
+            width: 16px;
+          }
+        }
+
+        span {
+          font-size: 14px;
+          color: rgb(220, 64, 64);
+
+          @include phone() {
+            font-size: 12px;
+          }
+        }
+      }
+
+      #logo {
+        width: 100px;
+        display: block;
+
+        svg {
+          width: 100%;
+        }
+      }
+
+      nav {
+        margin-top: 50px;
+
+        ul {
+          margin: 0;
+          padding: 0;
+
+          li {
+            list-style-type: none;
+
+            &:hover {
+              background: rgba($color: $defaultColor, $alpha: 0.08);
+            }
+
+            a {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              padding: 14px 18px;
+              border-radius: 4px;
+              svg {
+                width: 18px;
+                stroke: #f1f8ff;
+              }
+
+              span {
+                font-size: 14px;
+                font-weight: 300;
+                color: #f1f8ff;
+              }
+            }
+
+            & > ul {
+              margin: 10px 0px 10px 14px;
+              li {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-right: 8px;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+                &:hover {
+                  background: rgba($color: $defaultColor, $alpha: 0.14);
+                }
+
+                a {
+                  gap: 6px;
+                  padding: 8px 10px;
+                  width: calc(100% - 40px);
+
+                  label {
+                    width: 10px !important;
+                    height: 10px;
+                    border-radius: 2px;
+                    display: block;
+                  }
+                  span {
+                    display: block;
+                    width: calc(100% - 10px);
+                  }
+                }
+
+                & > span {
+                  font-size: 10px;
+                  width: 20px;
+                  height: 20px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  border-radius: 10px;
+                  color: #f1f8ff;
+                  background: rgba($color: $try, $alpha: 0.25);
+                }
+              }
+
+              .active {
+                background: rgba($color: $defaultColor, $alpha: 0.4);
+                &:hover {
+                  background: rgba($color: $defaultColor, $alpha: 0.54);
+                }
+              }
+            }
+
+            .active {
+              background: rgba($color: $defaultColor, $alpha: 0.89);
+
+              &:hover {
+                background: rgba($color: $defaultColor, $alpha: 0.98);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .showMenu {
+      @include mobile() {
+        display: block;
+        position: absolute;
+        height: 100%;
+        top: 0;
+        left: -0%;
+      }
+    }
+
+    main {
+      width: 100%;
+      overflow: hidden;
+      overflow-y: scroll;
+      height: 100vh;
+      header {
+        border-bottom: 1px solid rgba($color: $aColor, $alpha: 0.15);
+        padding: 15px 3%;
+
+        display: flex;
+        justify-content: space-between;
+
+        @include phone() {
+          padding: 10px 3%;
+        }
+
+        h1 {
+          font-weight: 500;
+          font-size: 26px;
+          padding: 0;
+          margin: 0;
+
+          @include tablet() {
+            font-size: 21px;
+          }
+          @include mobile() {
+            font-size: 19px;
+          }
+          @include phone() {
+            font-size: 17px;
+          }
+          @include semiPhone() {
+            font-size: 15px;
+          }
+
+          @include smallPhone() {
+            font-size: 14px;
+          }
+        }
+
+        .side_menu {
+          display: flex;
+          align-items: center;
+          gap: 30px;
+
+          @include tablet() {
+            gap: 20px;
+          }
+
+          a {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            svg {
+              width: 18px;
+              stroke: $primaryColor;
+            }
+
+            span {
+              font-size: 14px;
+              font-weight: 300;
+              color: $primaryColor;
+            }
+
+            .image_holder {
+              height: 40px;
+              width: 40px;
+              background-color: $primaryColor;
+              color: #f1f8ff;
+              border-radius: 35%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              font-size: 14px;
+              text-transform: uppercase;
+              overflow: hidden;
+
+              img {
+                width: 100%;
+              }
+
+              @include phone() {
+                height: 30px;
+                width: 30px;
+                font-size: 12px;
+              }
+            }
+          }
+
+          @include phone() {
+            a {
+              &:first-child {
+                display: none;
+              }
+            }
+          }
+        }
+
+        .bars {
+          display: flex;
+          align-items: center;
+
+          @include phone() {
+            gap: 6px;
+          }
+          #openMenu {
+            display: none;
+
+            @include mobile() {
+              display: block;
+              width: 24px;
+            }
+
+            @include phone() {
+              width: 20px;
+            }
+          }
+        }
+      }
+
+      .content {
+        min-height: 60vh;
+        padding: 0 3%;
+        overflow: hidden;
+
+        @include tablet() {
+          padding: 0 2%;
+        }
+
+        @include mobile() {
+          padding: 0 1%;
+        }
+
+        @include semiPhone() {
+          padding: 0 4%;
+        }
+
+        @include smallPhone() {
+          padding: 0 2%;
+        }
+
+        section {
+          padding: 15px 3%;
+
+          h3 {
+            font-weight: 500;
+            font-size: 24px;
+
+            @include bigTablet() {
+              font-size: 20px;
+            }
+
+            @include mobile() {
+              font-size: 17px;
+            }
+
+            @include semiPhone() {
+              font-size: 15px;
+            }
+
+            @include smallPhone() {
+              font-size: 14px;
+            }
+          }
+
+          @include tablet() {
+            padding: 10px 1%;
+          }
+
+          @include semiPhone() {
+            padding: 7px 0%;
+          }
+        }
+
+        #page_num {
+          display: flex;
+          background: rgba($color: $try, $alpha: 0.25);
+          justify-content: space-between;
+          align-items: center;
+
+          @include tablet() {
+            padding: 10px 3%;
+          }
+
+          @include semiPhone() {
+            padding: 7px 2%;
+            flex-direction: column;
+          }
+
+          p {
+            font-size: 18px;
+
+            @include tablet() {
+              font-size: 16px;
+            }
+
+            @include phone() {
+              font-size: 14px;
+            }
+
+            @include semiPhone() {
+              font-size: 12px;
+              padding: 0;
+              margin: 0;
+            }
+          }
+
+          a {
+            font-weight: 300;
+            color: $primaryColor;
+            font-size: 18px;
+            @include tablet() {
+              font-size: 16px;
+            }
+
+            @include phone() {
+              font-size: 14px;
+            }
+
+            @include semiPhone() {
+              font-size: 12px;
+            }
+          }
+        }
+
+        #statistics {
+          ul {
+            margin: 0;
+            padding: 0;
+
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+
+            @include bigTablet() {
+              grid-template-columns: repeat(3, 1fr);
+              gap: 10px;
+            }
+
+            @include mobile() {
+              grid-template-columns: repeat(2, 1fr);
+            }
+
+            @include smallPhone() {
+              gap: 5px;
+            }
+
+            li {
+              list-style-type: none;
+              position: relative;
+              // width: 200px;
+              width: 100%;
+              padding: 20px 0 0;
+              background: #fff;
+              border-radius: 14px;
+              overflow: hidden;
+              display: flex;
+              justify-content: space-between;
+              flex-direction: column;
+              svg {
+                width: 18px;
+                position: absolute;
+                right: 10px;
+                top: 10px;
+                stroke: $primaryColor;
+
+                @include phone() {
+                  width: 15px;
+                }
+
+                @include semiPhone() {
+                  width: 12px;
+                }
+              }
+
+              .info {
+                padding: 0 14px 14px;
+                p {
+                  font-weight: 500;
+                  font-size: 30px;
+                  padding: 0;
+                  margin: 0;
+
+                  @include mobile() {
+                    font-size: 27px;
+                  }
+
+                  @include phone() {
+                    font-size: 24px;
+                  }
+
+                  @include semiPhone() {
+                    font-size: 20px;
+                  }
+
+                  @include smallPhone() {
+                    font-size: 17px;
+                  }
+                }
+                strong {
+                  padding: 0;
+                  margin: 0;
+                  font-size: 14px;
+                  font-weight: 300;
+                  margin-bottom: 6px;
+                  display: block;
+
+                  @include mobile() {
+                    font-size: 12px;
+                  }
+
+                  @include semiPhone() {
+                    font-size: 10px;
+                    margin-bottom: 3px;
+                  }
+
+                  @include smallPhone() {
+                    font-size: 9px;
+                  }
+                }
+              }
+
+              .line {
+                height: 4px;
+                width: 100%;
+                background: $primaryColor;
+              }
+            }
+          }
+        }
+
+        #list {
+          ul {
+            margin: 0;
+            padding: 0;
+
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+
+            @include bigTablet() {
+              grid-template-columns: repeat(3, 1fr);
+              gap: 10px;
+            }
+
+            @include mobile() {
+              grid-template-columns: repeat(2, 1fr);
+            }
+
+            @include smallPhone() {
+              grid-template-columns: 1fr;
+            }
+
+            li {
+              background-color: rgba($color: $aColor, $alpha: 0.085);
+              width: calc(100% - 40px);
+              list-style-type: none;
+              padding: 20px;
+              position: relative;
+              border-radius: 10px;
+              overflow: hidden;
+
+              @include semiTablet() {
+                padding: 10px 17px;
+                width: calc(100% - 34px);
+              }
+
+              @include semiPhone() {
+                padding: 8px 14px;
+                width: calc(100% - 28px);
+              }
+
+              a {
+                color: $aColor !important;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: 100%;
+              }
+
+              p {
+                font-weight: 400;
+                font-size: 17px;
+                line-height: 150%;
+                margin: 0;
+
+                @include bigTablet() {
+                  font-size: 16px;
+                }
+
+                @include mobile() {
+                  font-size: 14px;
+                }
+
+                @include semiPhone() {
+                  font-size: 13px;
+                }
+
+                @include smallPhone() {
+                  font-size: 12px;
+                }
+              }
+
+              .li_task {
+                display: flex;
+                justify-content: space-between;
+                padding: 6px 0;
+
+                &:first-child {
+                  margin-top: 15px;
+                }
+
+                span {
+                  font-size: 13px;
+
+                  @include mobile() {
+                    font-size: 12px;
+                  }
+
+                  @include semiPhone() {
+                    font-size: 11px;
+                  }
+
+                  @include smallPhone() {
+                    font-size: 10px;
+                  }
+                }
+
+                .users {
+                  ul {
+                    margin: 0;
+                    padding: 0;
+                    display: flex;
+                    gap: 0;
+
+                    li {
+                      padding: 0;
+                      width: 20px;
+                      height: 20px;
+                      display: block;
+
+                      margin-left: -6px;
+
+                      &:first-child {
+                        margin-left: 0;
+                      }
+
+                      .image_holder {
+                        width: 20px;
+                        height: 20px;
+                        font-size: 8px;
+                        background-color: $primaryColor;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-weight: 500;
+                        box-shadow: 0px 0px 2px 1px
+                          rgba($color: $aColor, $alpha: 0.24);
+                        border-radius: 30px;
+                        overflow: hidden;
+                        img {
+                          width: 100%;
+                        }
+
+                        @include semiPhone() {
+                          width: 18px;
+                          height: 18px;
+                          font-size: 7px;
+                        }
+
+                        @include smallPhone() {
+                          width: 17px;
+                          height: 17px;
+                          font-size: 7px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
+              label {
+                width: 4px;
+                height: 100%;
+                border-radius: 3px;
+                background: grey;
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                @include phone() {
+                  top: inherit;
+                  bottom: 0;
+                  width: 100%;
+                  height: 4px;
+                }
+              }
+            }
+          }
+        }
+
+        #create-project {
+          max-width: 500px;
+          #block-tags {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            flex-wrap: wrap;
+            gap: 5px;
+
+            li {
+              list-style-type: none;
+              position: relative;
+              font-size: 14px;
+              font-weight: 300;
+              background: rgba($color: $primaryColor, $alpha: 0.24);
+              padding: 8px;
+              border-radius: 7px;
+              width: fit-content;
+              gap: 13px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+
+              @include phone() {
+                font-size: 12px;
+                gap: 10px;
+                padding: 6px;
+                border-radius: 5px;
+              }
+
+              @include semiPhone() {
+                font-size: 10px;
+                gap: 8px;
+                padding: 4px;
+                border-radius: 4px;
+              }
+
+              @include smallPhone() {
+                font-size: 8px;
+                gap: 6px;
+              }
+
+              svg {
+                width: 16px;
+                @include phone() {
+                  width: 14px;
+                }
+
+                @include semiPhone() {
+                  width: 12px;
+                }
+
+                @include smallPhone() {
+                  width: 10px;
+                }
+                &:hover {
+                  stroke: $defaultColor;
+                  stroke-width: 2;
+                }
+              }
+            }
+          }
+        }
+
+        #project-details {
+          max-width: 500px;
+          ul {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            width: 100%;
+            flex-wrap: wrap;
+            gap: 5px;
+            flex-direction: column;
+
+            li {
+              list-style-type: square;
+              font-size: 15px;
+              padding: 8px;
+
+              strong {
+                font-weight: 500;
+              }
+
+              li {
+                &:first-child {
+                  padding-top: 10px;
+                }
+                padding: 0;
+              }
+
+              p {
+                font-weight: 300;
+                margin: 0;
+              }
+
+              @include phone() {
+                p,
+                strong {
+                  font-size: 14px;
+                }
+
+                padding: 6px;
+              }
+
+              @include semiPhone() {
+                p,
+                strong {
+                  font-size: 12px;
+                }
+                padding: 4px;
+              }
+
+              @include smallPhone() {
+                p,
+                strong {
+                  font-size: 10px;
+                }
+              }
+            }
+          }
+
+          a {
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-weight: 300;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            width: fit-content;
+            margin-top: 24px;
+
+            transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+            background: #b31e00;
+            &:hover {
+              background: #981a01;
+            }
+            span {
+              color: #fff;
+              font-size: 15px;
+              font-weight: 300;
+            }
+
+            svg {
+              stroke: #fff;
+              width: 20px;
+            }
+          }
+        }
+
+        #progress {
+          width: 100%;
+          overflow: hidden;
+          overflow-x: scroll;
+          padding: 50px 0 20px 0;
+
+          #tabs {
+            display: flex;
+            gap: 25px;
+            width: fit-content;
+
+            .tab-item {
+              width: 280px;
+              display: block;
+
+              .tab-item-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 90%;
+                h3 {
+                  font-weight: 500;
+                  font-size: 20px;
+                }
+
+                span {
+                  background: rgba($color: $primaryColor, $alpha: 0.14);
+                  font-size: 13px;
+                  font-weight: 300;
+                  padding: 2px 5px;
+                  border-radius: 5px;
+                  color: $aColor;
+                }
+              }
+
+              ul {
+                margin: 0;
+                padding: 0;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 14px;
+
+                @include bigTablet() {
+                  gap: 10px;
+                }
+
+                @include smallPhone() {
+                  gap: 7px;
+                }
+
+                li {
+                  background-color: rgba($color: $aColor, $alpha: 0.085);
+                  width: calc(100% - 40px);
+                  list-style-type: none;
+                  padding: 20px;
+                  position: relative;
+                  border-radius: 10px;
+                  overflow: hidden;
+
+                  @include semiTablet() {
+                    padding: 10px 17px;
+                    width: calc(100% - 34px);
+                  }
+
+                  @include semiPhone() {
+                    padding: 8px 14px;
+                    width: calc(100% - 28px);
+                  }
+
+                  a {
+                    color: $aColor !important;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    background-attachment: red;
+                  }
+
+                  p {
+                    font-weight: 400;
+                    font-size: 17px;
+                    line-height: 150%;
+
+                    @include bigTablet() {
+                      font-size: 16px;
+                    }
+
+                    @include mobile() {
+                      font-size: 14px;
+                    }
+
+                    @include semiPhone() {
+                      font-size: 13px;
+                    }
+
+                    @include smallPhone() {
+                      font-size: 12px;
+                    }
+                  }
+
+                  .li_task {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 6px 0;
+
+                    &:first-child {
+                      margin-top: 15px;
+                    }
+
+                    span {
+                      font-size: 13px;
+
+                      @include mobile() {
+                        font-size: 12px;
+                      }
+
+                      @include semiPhone() {
+                        font-size: 11px;
+                      }
+
+                      @include smallPhone() {
+                        font-size: 10px;
+                      }
+                    }
+
+                    .users {
+                      ul {
+                        margin: 0;
+                        padding: 0;
+                        display: flex;
+                        gap: 0;
+
+                        li {
+                          padding: 0;
+                          width: 20px;
+                          height: 20px;
+                          display: block;
+
+                          margin-left: -6px;
+
+                          &:first-child {
+                            margin-left: 0;
+                          }
+
+                          .image_holder {
+                            width: 20px;
+                            height: 20px;
+                            font-size: 8px;
+                            background-color: $primaryColor;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-weight: 500;
+                            box-shadow: 0px 0px 2px 1px
+                              rgba($color: $aColor, $alpha: 0.24);
+                            border-radius: 30px;
+                            overflow: hidden;
+                            img {
+                              width: 100%;
+                            }
+
+                            @include semiPhone() {
+                              width: 18px;
+                              height: 18px;
+                              font-size: 7px;
+                            }
+
+                            @include smallPhone() {
+                              width: 17px;
+                              height: 17px;
+                              font-size: 7px;
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+
+                  .li_task_status {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: 5px;
+
+                    span {
+                      font-size: 13px;
+
+                      @include mobile() {
+                        font-size: 12px;
+                      }
+
+                      @include semiPhone() {
+                        font-size: 11px;
+                      }
+
+                      @include smallPhone() {
+                        font-size: 10px;
+                      }
+                    }
+
+                    .task_done,
+                    .task_complete,
+                    .task_in {
+                      color: $aColor;
+                      font-size: 10px;
+                      border-radius: 5px;
+                      padding: 4px 10px;
+                    }
+
+                    .task_done {
+                      background: rgb(160, 235, 79);
+                    }
+
+                    .task_complete {
+                      background: rgb(235, 196, 79);
+                    }
+
+                    .task_in {
+                      background: rgb(79, 157, 235);
+                      color: #fff;
+                    }
+
+                    svg {
+                      width: 24px;
+                    }
+                  }
+
+                  label {
+                    width: 4px;
+                    height: 100%;
+                    border-radius: 3px;
+                    background: grey;
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+
+                    @include phone() {
+                      top: inherit;
+                      bottom: 0;
+                      width: 100%;
+                      height: 4px;
+                    }
+                  }
+                }
+              }
+
+              #add_task {
+                padding: 10px 15px;
+                margin: 10px auto 0 auto;
+                display: flex;
+                width: 70%;
+                border-radius: 4px;
+                cursor: pointer;
+                gap: 6px;
+                align-items: center;
+                background-color: rgba($color: $try, $alpha: 0.25);
+                svg {
+                  width: 18px;
+                }
+
+                span {
+                  font-size: 14px;
+                  font-weight: 300;
+                }
+              }
+            }
+          }
+        }
+
+        #submenu {
+          padding: 15px 0 0;
+          display: flex;
+          justify-content: end;
+          gap: 20px;
+
+          a {
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-weight: 300;
+            background: rgba($color: $aColor, $alpha: 0.285);
+            display: flex;
+            gap: 5px;
+            align-items: center;
+
+            transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+            // &:last-child {
+            //   background: #b31e00;
+
+            //   &:hover {
+            //     background: #981a01;
+            //   }
+            //   span {
+            //     color: #fff;
+            //   }
+
+            //   svg {
+            //     stroke: #fff;
+            //   }
+            // }
+
+            &:hover {
+              background: rgba($color: $aColor, $alpha: 0.55);
+            }
+
+            svg {
+              width: 20px;
+              stroke: $aColor;
+            }
+
+            span {
+              font-size: 14px;
+              color: $aColor;
+            }
+
+            &:last-child {
+              background: $defaultColor;
+
+              &:hover {
+                background: $primaryColor;
+              }
+              span {
+                color: #fff;
+              }
+
+              svg {
+                stroke: #fff;
+              }
+            }
+          }
+        }
+
+        #task {
+          max-width: 700px;
+
+          .task_heading {
+            h2 {
+              font-weight: 500;
+              font-size: 30px;
+              margin: 0;
+              line-height: 140%;
+            }
+            p {
+              font-size: 18px;
+              font-weight: 300;
+              line-height: 140%;
+            }
+
+            .attachments {
+              .head {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                padding: 10px 0;
+                svg {
+                  width: 18px;
+                }
+                span {
+                  font-size: 16px;
+                }
+              }
+              .attachment_list {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 10px;
+
+                .attachment_item {
+                  background-color: rgba($color: $primaryColor, $alpha: 0.14);
+                  padding: 11px 13px;
+                  border-radius: 10px;
+                  font-size: 14px;
+                  font-weight: 300;
+                }
+              }
+            }
+          }
+
+          .tabs {
+            .task_tab {
+              padding: 20px 0 0;
+              display: flex;
+
+              border-bottom: 1px solid rgb(223, 223, 223);
+
+              .tab_item {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                padding: 13px 20px;
+                cursor: pointer;
+                transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+                &:hover {
+                  background: rgb(223, 223, 223);
+                  border-radius: 4px;
+                }
+
+                b {
+                  font-weight: 500;
+                  font-size: 16px;
+                }
+                span {
+                  font-size: 10px;
+                  padding: 3px 7px;
+                  border-radius: 4px;
+                  background-color: rgba($color: $aColor, $alpha: 0.085);
+                  color: $primaryColor;
+                }
+              }
+
+              .active {
+                border-bottom: 2px solid rgb(223, 223, 223);
+              }
+            }
+            .task_tab_details {
+              margin: 30px 0 0;
+
+              .task_subtask,
+              .task_comment,
+              .task_message {
+                display: none;
+              }
+
+              .active {
+                display: block;
+              }
+
+              .task_subtask {
+                ul {
+                  margin: 0;
+                  padding: 0;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 12px;
+
+                  li {
+                    list-style-type: none;
+                    display: flex;
+                    align-items: start;
+                    gap: 6px;
+                    padding: 16px;
+                    border-radius: 6px;
+                    box-shadow: 0px 0px 2px 1px #e0e0e0;
+                    justify-content: start;
+
+                    transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+                    cursor: pointer;
+
+                    &:hover {
+                      background-color: #fff;
+                    }
+
+                    p {
+                      font-size: 16px;
+                      font-weight: 300;
+                      margin: 0;
+                      padding: 0;
+                      line-height: 150%;
+                    }
+
+                    .del {
+                      text-decoration: line-through;
+                    }
+
+                    .custom-checkbox {
+                      padding-top: 5px;
+                    }
+                    /* Hide the default checkbox */
+                    .custom-checkbox input[type="checkbox"] {
+                      display: none;
+                    }
+
+                    /* Create a custom checkbox */
+                    .custom-checkbox label {
+                      position: relative;
+                      cursor: pointer;
+                      padding-left: 25px;
+                    }
+
+                    /* Create the checkmark/indicator (hidden when not checked) */
+                    .custom-checkbox label::before {
+                      content: "";
+                      position: absolute;
+                      left: 0;
+                      top: 0;
+                      width: 18px;
+                      height: 18px;
+                      border: 2px solid #f2f2f2;
+                      border-radius: 8px;
+                      background-color: #fff;
+                      box-shadow: 0 0 2px 1px #ccc;
+                    }
+
+                    /* Style the checkmark/indicator when checked */
+                    .custom-checkbox
+                      input[type="checkbox"]:checked
+                      + label::before {
+                      background-color: #4caf50;
+                      // border-color: #77cd79;
+                      box-shadow: 0 0 1px 1px #77cd79;
+                    }
+
+                    /* Checkmark */
+                    .custom-checkbox label::after {
+                      content: "";
+                      position: absolute;
+                      left: 7px;
+                      top: 3px;
+                      width: 5px;
+                      height: 10px;
+                      border: solid white;
+                      border-width: 0 3px 3px 0;
+                      transform: rotate(45deg);
+                      display: none;
+                    }
+
+                    /* Display the checkmark when checked */
+                    .custom-checkbox
+                      input[type="checkbox"]:checked
+                      + label::after {
+                      display: block;
+                    }
+                  }
+                }
+              }
+
+              .task_comment,
+              .task_message {
+                ul {
+                  margin: 0;
+                  padding: 0;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 12px;
+
+                  li {
+                    list-style-type: none;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: start;
+                    gap: 6px;
+                    padding: 20px;
+                    border-radius: 6px;
+                    border-bottom: 1px solid #e0e0e0;
+                    // box-shadow: 0px 0px 2px 1px #e0e0e0;
+                    justify-content: start;
+
+                    transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+                    cursor: pointer;
+
+                    &:hover {
+                      background-color: #e0e0e0;
+                    }
+
+                    p {
+                      font-size: 16px;
+                      font-weight: 300;
+                      margin: 0;
+                      padding: 0;
+                      line-height: 150%;
+                    }
+
+                    .wrapper {
+                      display: flex;
+                      width: 97%;
+                      justify-content: space-between;
+                      margin: 10px auto 0 auto;
+                      .user {
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+
+                        .image_holder {
+                          width: 35px;
+                          height: 35px;
+                          font-size: 14px;
+                          background-color: $primaryColor;
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                          font-weight: 500;
+                          box-shadow: 0px 0px 2px 1px
+                            rgba($color: $aColor, $alpha: 0.24);
+                          border-radius: 12px;
+                          overflow: hidden;
+                          color: #e0e0e0;
+                          img {
+                            width: 100%;
+                          }
+
+                          @include semiPhone() {
+                            width: 18px;
+                            height: 18px;
+                            font-size: 7px;
+                          }
+
+                          @include smallPhone() {
+                            width: 17px;
+                            height: 17px;
+                            font-size: 7px;
+                          }
+                        }
+                        .info {
+                          display: flex;
+                          flex-direction: column;
+
+                          strong {
+                            font-weight: 500;
+                            font-size: 16px;
+                          }
+
+                          span {
+                            font-weight: 300;
+                            font-size: 13px;
+                          }
+                        }
+                      }
+
+                      svg {
+                        width: 30px;
+                        stroke: $aColor;
+                      }
+
+                      .active {
+                        fill: $primaryColor;
+                        stroke: $primaryColor;
+                      }
+                    }
+                  }
+                }
+              }
+
+              .task_message {
+                .user {
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
+                  justify-content: space-between;
+                  width: 100%;
+                  margin-top: 16px;
+
+                  .image_holder {
+                    width: 35px;
+                    height: 35px;
+                    font-size: 14px;
+                    background-color: $primaryColor;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-weight: 500;
+                    box-shadow: 0px 0px 2px 1px
+                      rgba($color: $aColor, $alpha: 0.24);
+                    border-radius: 12px;
+                    overflow: hidden;
+                    color: #e0e0e0;
+                    img {
+                      width: 100%;
+                    }
+
+                    @include semiPhone() {
+                      width: 18px;
+                      height: 18px;
+                      font-size: 7px;
+                    }
+
+                    @include smallPhone() {
+                      width: 17px;
+                      height: 17px;
+                      font-size: 7px;
+                    }
+                  }
+                  .info {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+
+                    strong {
+                      font-weight: 500;
+                      font-size: 16px;
+                    }
+                  }
+                  span {
+                    font-weight: 300;
+                    font-size: 13px;
+                  }
+                }
+
+                form {
+                  flex-direction: column;
+                  align-items: end;
+                  gap: 15px;
+
+                  button {
+                    background-color: $primaryColor;
+                    color: #f2f2f2;
+                    border-radius: 8px;
+                  }
+                }
+
+                .active {
+                  fill: $primaryColor;
+                  stroke: $primaryColor;
+                }
+              }
+
+              form {
+                display: flex;
+                align-items: center;
+                padding: 60px 2% 30px 2%;
+
+                button,
+                input,
+                textarea {
+                  border: none;
+                  outline: none;
+                  background-color: transparent;
+                  color: $aColor;
+                }
+
+                input {
+                  font-size: 18px;
+                  font-weight: 300;
+                  width: 100%;
+                  padding: 14px 6px;
+                  border-bottom: 1px solid #dddddd;
+                }
+
+                textarea {
+                  font-size: 18px;
+                  font-weight: 300;
+                  width: calc(100% - 40px);
+                  padding: 17px 20px;
+                  border-radius: 10px;
+                  box-shadow: 0px 0px 2px 1px #e0e0e0;
+                  // border-bottom: 1px solid #dddddd;
+                }
+
+                button {
+                  cursor: pointer;
+                  background: rgba($color: $aColor, $alpha: 0.035);
+                  padding: 10px 20px;
+                  border-radius: 12px;
+                  transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+                  svg {
+                    width: 30px;
+                    transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+                    transform: rotate(330deg);
+                    stroke: $borderColor;
+                  }
+
+                  &:hover {
+                    background-color: #e0e0e0;
+                    svg {
+                      transform: rotate(350deg);
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          .extra_info {
+            background: rgba($color: $aColor, $alpha: 0.185);
+            margin-top: 30px;
+            padding: 15px;
+            border-radius: 10px;
+
+            .info_list {
+              display: flex;
+              align-items: center;
+              padding: 7px 0;
+              margin-bottom: 1px;
+              span {
+                display: block;
+                width: 200px;
+                font-size: 18px;
+                font-weight: 300;
+                color: $aColor;
+              }
+
+              strong,
+              label,
+              a {
+                color: $aColor;
+                font-size: 18px;
+                font-weight: 500;
+              }
+
+              label {
+                background-color: rgba($color: $primaryColor, $alpha: 0.14);
+                padding: 8px 16px;
+                border-radius: 10px;
+                font-size: 16px;
+                font-weight: 300;
+              }
+
+              a {
+                display: flex;
+                gap: 6px;
+                align-items: center;
+
+                svg {
+                  width: 24px;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      #setting {
+        display: grid;
+        grid-template-columns: 400px auto;
+        gap: 20px;
+
+        @include bigTablet() {
+          grid-template-columns: 340px auto;
+        }
+
+        @include semiTablet() {
+          grid-template-columns: 300px auto;
+        }
+
+        @include phone() {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .manage_picture {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          background-color: #fff;
+          border-radius: 8px;
+          padding: 20px 0;
+          .image_holder {
+            height: 90px;
+            width: 90px;
+            background-color: $primaryColor;
+            color: #f1f8ff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            text-transform: uppercase;
+            overflow: hidden;
+
+            img {
+              width: 100%;
+            }
+
+            @include phone() {
+              height: 70px;
+              width: 70px;
+              font-size: 20px;
+            }
+          }
+
+          @include phone() {
+            padding: 15px 0;
+          }
+
+          @include smallPhone() {
+            padding: 10px 0;
+          }
+
+          .control {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            align-items: center;
+
+            @include phone() {
+              width: 90%;
+            }
+
+            svg {
+              width: 25px;
+
+              @include phone() {
+                width: 20px;
+              }
+
+              @include smallPhone() {
+                width: 17px;
+              }
+            }
+
+            a {
+              font-size: 17px;
+
+              @include phone() {
+                font-size: 15px;
+              }
+
+              @include semiPhone() {
+                font-size: 13px;
+              }
+
+              @include smallPhone() {
+                font-size: 11px;
+              }
+            }
+          }
+        }
+        ul {
+          margin: 0;
+          padding: 0;
+
+          li {
+            list-style-type: none;
+            padding: 20px 20px;
+            background: #fff;
+            margin-top: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+
+            @include mobile() {
+              padding: 15px 15px;
+            }
+
+            @include semiPhone() {
+              padding: 13px 13px;
+            }
+
+            b,
+            span {
+              color: $aColor;
+              font-size: 18px;
+
+              @include semiTablet() {
+                font-size: 16px;
+              }
+
+              @include mobile() {
+                font-size: 15px;
+              }
+
+              @include phone() {
+                font-size: 14px;
+              }
+              @include smallPhone() {
+                font-size: 12px;
+              }
+            }
+          }
+        }
+
+        #update_form {
+          max-width: 600px;
+          h3 {
+            border-bottom: 1px solid rgba($color: $aColor, $alpha: 0.24);
+            padding: 15px 0;
+
+            @include phone() {
+              padding: 10px 0;
+            }
+            // font-weight: 500;
+          }
+          form {
+            & > span {
+              display: block;
+              background-color: $try;
+              margin: 30px 0 5px 0;
+              padding: 1px 10px;
+              color: #f1f8ff;
+              border-radius: 4px;
+
+              @include mobile() {
+                margin: 20px 0 4px 0;
+              }
+
+              @include semiPhone() {
+                margin: 14px 0 3px 0;
+              }
+            }
+          }
+        }
+      }
+
+      footer {
+        font-weight: 300;
+        font-size: 14px;
+        padding: 20px 4%;
+        text-align: right;
+        margin-top: 100px;
+
+        @include mobile() {
+          font-size: 12px;
+        }
+
+        @include semiPhone() {
+          font-size: 10px;
+        }
+      }
+    }
+
+    .formControl {
+      padding: 5px 0;
+      @include phone() {
+        padding: 3px 0;
+      }
+      @include smallPhone() {
+        padding: 2px 0;
+      }
+
+      label {
+        font-size: 16px;
+        font-weight: 300;
+        color: $aColor;
+        padding: 3px;
+        display: block;
+
+        @include mobile() {
+          font-size: 15px;
+        }
+
+        @include phone() {
+          font-size: 14px;
+        }
+
+        @include semiPhone() {
+          font-size: 12px;
+        }
+      }
+
+      small {
+        font-size: 12px;
+        font-weight: 300;
+
+        @include phone() {
+          font-size: 10px;
+        }
+
+        @include smallPhone() {
+          font-size: 8px;
+        }
+      }
+
+      input {
+        // border: 1px solid #ccc;
+        outline: none;
+        border: none;
+        width: calc(100% - 32px);
+        font-size: 15px;
+        padding: 12px 14px;
+        font-weight: 300;
+        border-radius: 6px;
+        transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        font-weight: 300;
+        box-shadow: 0 0 1px 1px rgb(219, 219, 219);
+
+        @include phone() {
+          padding: 10px 12px;
+          font-size: 13px;
+          border-radius: 4px;
+          width: calc(100% - 24px);
+        }
+
+        @include smallPhone() {
+          padding: 8px 10px;
+          font-size: 11px;
+          border-radius: 3px;
+          width: calc(100% - 18px);
+        }
+
+        &:focus {
+          box-shadow: 0 0 4px 1px rgba($color: $primaryColor, $alpha: 0.4);
+        }
+      }
+
+      button {
+        width: fit-content;
+        padding: 12px 24px;
+        border: none;
+        outline: none;
+        color: #fff;
+        background-color: $try;
+        border-radius: 6px;
+        font-size: 16px;
+        margin-top: 10px;
+        cursor: pointer;
+        transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        font-weight: 300;
+
+        @include phone() {
+          padding: 9px 18px;
+          font-size: 14px;
+        }
+
+        @include smallPhone() {
+          padding: 6px 12px;
+          font-size: 11px;
+        }
+
+        &:hover {
+          background-color: $primaryColor;
+        }
+      }
+    }
+  }
+
+  #modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 200;
+    background: rgba($color: $aColor, $alpha: 0.4);
+    overflow-y: scroll;
+
+    .modal-add-task {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 500px;
+      width: calc(100% - 40px);
+      margin: 20px auto;
+
+      .modal-header {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        h3 {
+          margin: 0;
+          font-weight: 500;
+        }
+        svg {
+          width: 24px;
+        }
+      }
+
+      form {
+        .formControl {
+          padding: 5px 0;
+          @include phone() {
+            padding: 3px 0;
+          }
+          @include smallPhone() {
+            padding: 2px 0;
+          }
+
+          label {
+            font-size: 16px;
+            font-weight: 300;
+            color: $aColor;
+            padding: 3px;
+            display: block;
+
+            @include mobile() {
+              font-size: 15px;
+            }
+
+            @include phone() {
+              font-size: 14px;
+            }
+
+            @include semiPhone() {
+              font-size: 12px;
+            }
+          }
+
+          small {
+            font-size: 12px;
+            font-weight: 300;
+
+            @include phone() {
+              font-size: 10px;
+            }
+
+            @include smallPhone() {
+              font-size: 8px;
+            }
+          }
+
+          input,
+          textarea,
+          select {
+            // border: 1px solid #ccc;
+            outline: none;
+            border: none;
+            // width: calc(100% - 28px);
+            width: 100%;
+            font-size: 15px;
+            padding: 12px 14px;
+            font-weight: 300;
+            border-radius: 6px;
+            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 300;
+            box-shadow: 0 0 1px 1px rgb(219, 219, 219);
+
+            @include phone() {
+              padding: 10px 12px;
+              font-size: 13px;
+              border-radius: 4px;
+              // width: calc(100% - 24px);
+            }
+
+            @include smallPhone() {
+              padding: 8px 10px;
+              font-size: 11px;
+              border-radius: 3px;
+              // width: calc(100% - 18px);
+            }
+
+            &:focus {
+              box-shadow: 0 0 4px 1px rgba($color: $primaryColor, $alpha: 0.4);
+            }
+          }
+
+          select {
+            width: 100%;
+          }
+
+          button {
+            width: fit-content;
+            padding: 12px 24px;
+            border: none;
+            outline: none;
+            color: #fff;
+            background-color: $try;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 300;
+
+            @include phone() {
+              padding: 9px 18px;
+              font-size: 14px;
+            }
+
+            @include smallPhone() {
+              padding: 6px 12px;
+              font-size: 11px;
+            }
+
+            &:hover {
+              background-color: $primaryColor;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .line-clamp-4 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+}
