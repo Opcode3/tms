@@ -47,6 +47,8 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
         if (count($res["message"]) > 2) {
             $task = $res["message"];
 
+            // var_dump($task);
+
             $task_id = (int) $res["message"]["task_id"];
 
             $res_attachement = json_decode($controller->getTaskAttachments($task_id), true);
@@ -181,12 +183,12 @@ $activeTab = isset($_SESSION["activeTab"]) ? $_SESSION["activeTab"] : 0;
             </header>
             <div class="content">
                 <?php
-                if ($user["user_id"] == $task["created_by"]) {
+                if ($user["user_id"] == $task["created_by"] && $task["project_status"] != 1) {
                 ?>
                     <section id="extra-menu">
                         <ul>
                             <li> <a href="./edit-task.php?<?php echo "slug=$slug&task=$task_slug"; ?>">Edit Task</a> </li>
-                            <li> <button data-href="">Delete Task</button> </li>
+                            <li> <button id="btnDeleteTask" data-href="./manage-task.php?<?php echo "slug=$slug&task=$task_slug&delete=true"; ?>">Delete Task</button> </li>
                         </ul>
                     </section>
 
@@ -443,6 +445,15 @@ $activeTab = isset($_SESSION["activeTab"]) ? $_SESSION["activeTab"] : 0;
 <script>
     const closeMenu = document.querySelector("#closeMenu");
     const openMenu = document.querySelector("#openMenu");
+
+
+    const btnDeleteTask = document.querySelector("#btnDeleteTask");
+
+    btnDeleteTask.addEventListener('click', function() {
+        if (confirm("Are you sure, you want to delete this task?")) {
+            window.location.href = this.getAttribute('data-href');
+        }
+    });
 
     var storage = window.localStorage;
 

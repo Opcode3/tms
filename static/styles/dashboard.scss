@@ -901,7 +901,8 @@ body {
             }
           }
 
-          button {
+          button,
+          a {
             padding: 12px 15px;
             outline: none;
             border-radius: 8px;
@@ -927,6 +928,14 @@ body {
             svg {
               stroke: #fff;
               width: 20px;
+            }
+          }
+
+          a {
+            background: rgb(9, 209, 92);
+            display: block;
+            &:hover {
+              background: #019831;
             }
           }
         }

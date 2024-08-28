@@ -72,7 +72,7 @@ class Task extends BaseModel
 
     function fetchTaskBySlug(string $slug)
     {
-        $sql = "SELECT $this->table_name.*, users_tb.user_fullname, users_tb.user_username, users_tb.user_picture FROM $this->table_name LEFT JOIN users_tb ON $this->table_name.assigned_to = users_tb.user_id WHERE task_slug = ?";
+        $sql = "SELECT $this->table_name.*, projects_tb.project_status, users_tb.user_fullname, users_tb.user_username, users_tb.user_picture FROM $this->table_name LEFT JOIN users_tb ON $this->table_name.assigned_to = users_tb.user_id LEFT JOIN projects_tb ON $this->table_name.task_project_id = projects_tb.project_id WHERE task_slug = ?";
         $response = $this->fetch($sql, [$slug]);
         return $response;
     }

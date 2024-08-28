@@ -173,6 +173,14 @@ class ProjectService implements ProjectServiceImpl
         return ResponseDto::json("We are unable to delete this project at the moment. Please try again!");
     }
 
+    function markProjectAsComplete(string $slug): string
+    {
+        $response = $this->model->updateProjectStatus($slug);
+        if ($response)
+            return ResponseDto::json("Project has been marked completed.", 200);
+        return ResponseDto::json("We are unable to process this request. Please try again!");
+    }
+
 
     // PU
     function getProjectMembers(int $project_id): string
@@ -264,6 +272,16 @@ class ProjectService implements ProjectServiceImpl
         }
         return ResponseDto::json($response, 200);
     }
+
+
+    function removeTask(string $slug): string
+    {
+        $response = $this->modelTask->deleteTask($slug);
+        if ($response)
+            return ResponseDto::json("Task was deleted successfully", 200);
+        return ResponseDto::json("We are unable to delete this task at the moment. Please try again!");
+    }
+
 
     // SubTask
 

@@ -1148,7 +1148,8 @@ body .container main .content #project-details ul li p {
   }
 }
 
-body .container main .content #project-details button {
+body .container main .content #project-details button,
+body .container main .content #project-details a {
   padding: 12px 15px;
   outline: none;
   border-radius: 8px;
@@ -1171,19 +1172,31 @@ body .container main .content #project-details button {
   background: #b31e00;
 }
 
-body .container main .content #project-details button:hover {
+body .container main .content #project-details button:hover,
+body .container main .content #project-details a:hover {
   background: #981a01;
 }
 
-body .container main .content #project-details button span {
+body .container main .content #project-details button span,
+body .container main .content #project-details a span {
   color: #fff;
   font-size: 15px;
   font-weight: 300;
 }
 
-body .container main .content #project-details button svg {
+body .container main .content #project-details button svg,
+body .container main .content #project-details a svg {
   stroke: #fff;
   width: 20px;
+}
+
+body .container main .content #project-details a {
+  background: #09d15c;
+  display: block;
+}
+
+body .container main .content #project-details a:hover {
+  background: #019831;
 }
 
 body .container main .content #progress {

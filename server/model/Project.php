@@ -76,6 +76,18 @@ class Project extends BaseModel
         return $response;
     }
 
+    function updateProjectStatus(string $slug)
+    {
+        if ($this->isSlug($slug) == false) {
+            $payload = array(
+                "_status" => 1,
+                "_slug" => $slug
+            );
+            $sql = "UPDATE $this->table_name SET project_status = :_status, updated_at = :updatedAt WHERE project_slug = :_slug";
+            return $this->update($sql, $payload);
+        }
+    }
+
 
 
     function updateLike(int $new_like, int $threat_id)

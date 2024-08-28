@@ -31,38 +31,40 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
     if (isset($_GET["slug"])) {
         $slug = $_GET["slug"];
 
+
+        if (isset($_POST["btnUpdateProject"])) {
+            $title = $_POST["title"];
+            $deadline = $_POST["deadline"];
+            $real_members = $_POST["real_members"];
+            $old_members = $_POST["old_members"];
+            $in_project_id = $_POST["project_id"];
+
+            $color = $_POST["color"];
+
+            $supposed_members = outputDelistMembers(explode(',', $old_members), explode(',', $real_members));
+
+            $payload = array(
+                '_name' => $title,
+                '_slug' => $slug,
+                '_deadline' => $deadline,
+                '_color' => $color,
+                '_members' => $supposed_members[0]
+            );
+            $response = json_decode($controller->modifyProjectInfo($payload, $in_project_id, $supposed_members[1]), true);
+            if ($response["status_code"] == 200 || $response["status_code"] == 422) {
+                echo "<script> alert('" . $response["message"] . "'); </script>";
+            } else {
+                echo "<script> alert('" . $response["message"] . "'); </script>";
+                $show_text = ["title" => $title, "deadline" => $deadline];
+            }
+        }
+
+
         $res = json_decode($controller->getProjectBySlug($slug), true);
 
 
         if (count($res["message"]) > 0 && isset($res["message"]["project_id"])) {
             $project = $res["message"];
-
-
-            if (isset($_POST["btnUpdateProject"])) {
-                $title = $_POST["title"];
-                $deadline = $_POST["deadline"];
-                $real_members = $_POST["real_members"];
-                $old_members = $_POST["old_members"];
-
-                $color = $_POST["color"];
-
-                $supposed_members = outputDelistMembers(explode(',', $old_members), explode(',', $real_members));
-
-                $payload = array(
-                    '_name' => $title,
-                    '_slug' => $slug,
-                    '_deadline' => $deadline,
-                    '_color' => $color,
-                    '_members' => $supposed_members[0]
-                );
-                $response = json_decode($controller->modifyProjectInfo($payload, $project["project_id"], $supposed_members[1]), true);
-                if ($response["status_code"] == 200 || $response["status_code"] == 422) {
-                    echo "<script> alert('" . $response["message"] . "'); </script>";
-                } else {
-                    echo "<script> alert('" . $response["message"] . "'); </script>";
-                    $show_text = ["title" => $title, "deadline" => $deadline];
-                }
-            }
 
             $res_members = json_decode($controller->getProjectMembers($project["project_id"]), true);
             $member = join(",", array_map(function ($elem) {
@@ -131,11 +133,10 @@ function outputDelistMembers(array $oldList, array $newList)
                     <a href="./setting.php">
                         <div class="image_holder">
                             <?php
-                            // $pic = $threat["user_picture"];
-                            // if ($pic !== NULL && strlen(trim($pic)) > 9) {
-                            //     echo " <img src='" . Helper::loadImage($pic) . "' alt='' /> ";
-                            // } else echo Helper::getInitialNames($threat["user_fullname"]);
-                            echo Helper::getInitialNames("Amaka Emmanuel");
+                            $pic = $user["user_picture"];
+                            if ($pic !== NULL && strlen(trim($pic)) > 9) {
+                                echo " <img src='" . Helper::loadImage($pic) . "' alt='' /> ";
+                            } else echo Helper::getInitialNames($user["user_fullname"]);
                             ?>
                         </div>
                     </a>
@@ -151,6 +152,7 @@ function outputDelistMembers(array $oldList, array $newList)
                             <input type="text" name="title" value="<?php echo isset($project["project_name"]) ? $project["project_name"] : ""; ?>" required minlength="5" id="title" placeholder="Enter Project Title">
                         </div>
                         <div class="formControl">
+                            <input type="hidden" name="project_id" value="<?php echo $project["project_id"]; ?>">
                             <label for="deadline">Deadline</label>
                             <input type="date" required name="deadline" id="deadline" value="<?php echo isset($project["project_deadline"]) ? $project["project_deadline"] : ""; ?>">
                         </div>

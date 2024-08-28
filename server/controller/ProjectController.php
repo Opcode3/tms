@@ -58,6 +58,11 @@ class ProjectController
     }
 
 
+    function markAsCompleteProject(string $slug)
+    {
+        return $this->projectService->markProjectAsComplete($slug);
+    }
+
     function getProjectMembers(int $id)
     {
         return $this->projectService->getProjectMembers($id);
@@ -105,6 +110,11 @@ class ProjectController
     function getProjectAssignedTasks(int $id)
     {
         return $this->projectService->getAssignedProject($id);
+    }
+
+    function deleteTask(string $slug)
+    {
+        return $this->projectService->removeTask($slug);
     }
 
 
