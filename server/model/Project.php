@@ -16,8 +16,9 @@ class Project extends BaseModel
 
     function insertProject(array $payload)
     {
+
         if ($this->isProject($payload["_name"], $payload["_creator_id"]) === true) {
-            $sql = "INSERT INTO $this->table_name(project_slug, project_name, project_deadline, project_color) 
+            $sql = "INSERT INTO $this->table_name(project_slug, project_name, creator_id, project_deadline, project_color) 
                     VALUES(:_slug, :_name, :_creator_id, :_deadline, :_color)";
             return $this->insertOutputId($sql, $payload, "_slug");
         }
@@ -44,6 +45,20 @@ class Project extends BaseModel
     {
         $sql = "SELECT $this->table_name.* FROM $this->table_name LEFT JOIN users_tb ON $this->table_name.creator_id = users_tb.user_id WHERE creator_id = ?";
         $response = $this->fetchMany($sql, [$_id]);
+        return $response;
+    }
+
+    function fetchProjectById(int $_id)
+    {
+        $sql = "SELECT $this->table_name.* FROM $this->table_name LEFT JOIN users_tb ON $this->table_name.creator_id = users_tb.user_id WHERE project_id = ?";
+        $response = $this->fetch($sql, [$_id]);
+        return $response;
+    }
+
+    function fetchProjectByStatus(int $_id, int $status = 0)
+    {
+        $sql = "SELECT $this->table_name.* FROM $this->table_name LEFT JOIN users_tb ON $this->table_name.creator_id = users_tb.user_id WHERE creator_id = ? AND project_status = ?";
+        $response = $this->fetchMany($sql, [$_id, $status]);
         return $response;
     }
 

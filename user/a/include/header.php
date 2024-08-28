@@ -3,14 +3,31 @@
 use app\controller\ProjectController;
 
 $page = $GLOBALS["page"];
-$_projects = [];
 $p_item = isset($_GET["slug"]) ? $_GET["slug"] : "";
 
 $_controller = new ProjectController();
 $user_id = $GLOBALS["user"]["user_id"];
 $_res = json_decode($_controller->getCreatorProjects($user_id), true);
+$assigned_res = json_decode($_controller->getProjectAssignedTasks($user_id), true);
 
-$_projects = $_res["message"];
+
+
+
+// var_dump($assigned_res["message"][0]);
+
+$h_completed_projects = [];
+$_projects = [];
+$assigned_task_projects = [];
+
+foreach ($_res["message"] as $key => $h_project) {
+    if ($h_project["project_status"] == 1) {
+        array_push($h_completed_projects, $h_project);
+    } else {
+        array_push($_projects, $h_project);
+    }
+}
+
+$assigned_task_projects = $assigned_res["message"];
 
 ?>
 <aside>
@@ -57,7 +74,47 @@ $_projects = $_res["message"];
                                     <label for="" style="background-color: <?php echo $_project["project_color"]; ?>;"></label>
                                     <span class="truncate"><?php echo $_project["project_name"]; ?></span>
                                 </a>
-                                <span>2</span>
+                                <span><?php echo $_project["task_count"]; ?></span>
+                            </li>
+                        <?php
+                        }
+                        ?>
+                    </ul>
+                <?php
+                }
+
+                if (count($h_completed_projects) > 0) {
+                ?>
+                    <span class="submenu">Completed Project</span>
+                    <ul>
+                        <?php
+                        foreach ($h_completed_projects as $key => $_project) {
+                        ?>
+                            <li class=" <?php echo $p_item ==  $_project["project_slug"] ? 'active' : ''; ?> ">
+                                <a href="./project.php?slug=<?php echo $_project["project_slug"]; ?>">
+                                    <label for="" style="background-color: <?php echo $_project["project_color"]; ?>;"></label>
+                                    <span class="truncate"><?php echo $_project["project_name"]; ?></span>
+                                </a>
+                                <span><?php echo $_project["task_count"]; ?></span>
+                            </li>
+                        <?php
+                        }
+                        ?>
+                    </ul>
+                <?php
+                }
+                if (count($assigned_task_projects) > 0) {
+                ?>
+                    <span class="submenu">Assigned Project</span>
+                    <ul>
+                        <?php
+                        foreach ($assigned_task_projects as $key => $_project) {
+                        ?>
+                            <li class=" <?php echo $p_item ==  $_project["project_slug"] ? 'active' : ''; ?> ">
+                                <a href="./assigned-project.php?slug=<?php echo $_project["project_slug"]; ?>">
+                                    <label for="" style="background-color: <?php echo $_project["project_color"]; ?>;"></label>
+                                    <span class="truncate"><?php echo $_project["project_name"]; ?></span>
+                                </a>
                             </li>
                         <?php
                         }

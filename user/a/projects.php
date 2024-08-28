@@ -1,5 +1,5 @@
 <?php
-$path = "/tms";
+$path = "";
 $page = "projects";
 
 use app\controller\ProjectController;
@@ -27,7 +27,6 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
 
 
     $res = json_decode($controller->getCreatorProjects((int) $user['user_id']), true);
-    // var_dump($res);
     $projects = $res["message"];
 } else {
     header("location: ../login.php");

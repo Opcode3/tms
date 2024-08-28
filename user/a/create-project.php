@@ -1,5 +1,5 @@
 <?php
-$path = "/tms";
+$path = "";
 $page = "projects";
 
 use app\controller\ProjectController;

@@ -1,8 +1,8 @@
 <?php
-$path = "/tms";
+$path = "";
 $page = "dashboard";
 
-
+use app\controller\ProjectController;
 use app\utils\Helper;
 
 ini_set('display_errors', 1);
@@ -14,10 +14,12 @@ error_reporting(E_ALL);
 
 include '../../vendor/autoload.php';
 $created_projects = 500;
-$completed_projects = 930;
+$completed_projects = 0;
 $tasks = 398;
-$assigned_task = 93893;
 $completed_task = 0;
+$assigned_task = 0;
+$pending_task = 0;
+$inprogress_task = 0;
 
 
 $projects = [];
@@ -28,13 +30,23 @@ $user = [];
 session_start();
 if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SESSION["user"]) && is_array($_SESSION["user"]) && count($_SESSION["user"]) == 9) {
 
-    // $controller = new ThreatController();
+    $controller = new ProjectController();
 
-    // $o_report = $controller->getCount();
-    // $total_report = $controller->getMyCount((int) $_SESSION["user"]['user_id']);
+    $created_projects = $controller->getCount((int) $_SESSION["user"]['user_id']);
+    $completed_projects = $controller->getCompleteCount((int) $_SESSION["user"]['user_id']);
+
+    $tasks = $controller->getTaskCount((int) $_SESSION["user"]['user_id']);
+    $assigned_tasks = json_decode($controller->getAssignedTasks((int) $_SESSION["user"]['user_id']), true);
+    if (is_array($assigned_tasks["message"])) {
+        $assigned_task = count($assigned_tasks["message"]);
+        foreach ($assigned_tasks["message"] as $key => $i_task) {
+            if ($i_task["task_status"] == 3) $completed_task += 1;
+            if ($i_task["task_status"] == 0) $pending_task += 1;
+            if ($i_task["task_status"] == 1 || $i_task["task_status"] == 2) $inprogress_task += 1;
+        }
+    }
 
     $user = $_SESSION["user"];
-    // var_dump( $_SESSION["user"]);
 } else {
     header("location: ../login.php");
 }
@@ -110,7 +122,7 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
                             </svg>
                             <div class="info">
                                 <strong>Completed Projects</strong>
-                                <p><?php echo number_format($completed_projects) ?></p>
+                                <p><?php echo number_format($completed_projects); ?></p>
                             </div>
                             <div class="line"></div>
                         </li>
@@ -126,7 +138,7 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
                         </li>
                         <li>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
                             </svg>
                             <div class="info">
                                 <strong>Assigned Task</strong>
@@ -141,6 +153,26 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
                             <div class="info">
                                 <strong>Completed Task</strong>
                                 <p><?php echo number_format($completed_task) ?></p>
+                            </div>
+                            <div class="line"></div>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+                            </svg>
+                            <div class="info">
+                                <strong>Pending Task</strong>
+                                <p><?php echo number_format($pending_task) ?></p>
+                            </div>
+                            <div class="line"></div>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+                            </svg>
+                            <div class="info">
+                                <strong>In-Progress Task</strong>
+                                <p><?php echo number_format($inprogress_task) ?></p>
                             </div>
                             <div class="line"></div>
                         </li>
@@ -191,28 +223,6 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
                 <?php
                 }
                 ?>
-                <!-- <li>
-                            <a href="./project.php?slug=">
-                                <p class="line-clamp-2">Design the banner for the twitter lead campaign</p>
-                                <div class="li_task">
-                                    <span>2 Task(s)</span>
-                                    <span>100%</span>
-                                </div>
-                                <div class="li_task">
-                                    <div class="users">
-                                        <ul>
-                                            <li>
-                                                <div class="image_holder">
-                                                    <img src="../../static/images/no-image.png" alt="">
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <span> 01 Aug / 04 Aug </span>
-                                </div>
-                                <label></label>
-                            </a>
-                        </li> -->
 
             </div>
 

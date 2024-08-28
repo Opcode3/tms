@@ -1,5 +1,5 @@
 <?php
-$path = "/tms";
+$path = "";
 $page = "setting";
 
 use app\controller\UserController;
@@ -25,6 +25,7 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
 
     $user = $_SESSION["user"];
     $controller = new UserController();
+
 
     if (isset($_POST["btnUserAccountUpdate"])) {
         $new_password = $_POST["new_password"];

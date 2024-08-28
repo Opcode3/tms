@@ -7,7 +7,7 @@ use app\controller\UserController;
 
 include '../vendor/autoload.php';
 
-$path = "/tms";
+$path = "";
 
 $show_text = [];
 if (isset($_POST["btnUserRegistration"])) {
@@ -30,8 +30,8 @@ if (isset($_POST["btnUserRegistration"])) {
 
         if ($response["status_code"] == 201 || $response["status_code"] == 422) {
             $show_text = [];
+            header("refresh:1; url=./login.php");
             echo "<script> alert('" . $response["message"] . "'); </script>";
-            header("refresh:0; url=./login.php");
         } else {
             echo "<script> alert('" . $response["message"] . "'); </script>";
             $show_text = ["email" => $email, "fullname" => $fullname, 'username' => $username];

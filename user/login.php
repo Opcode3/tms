@@ -4,7 +4,7 @@ use app\controller\UserController;
 
 include '../vendor/autoload.php';
 
-$path = "/tms";
+$path = "";
 
 $show_text = ["username" => "opcode3"];
 if (isset($_POST["btnLogin"])) {

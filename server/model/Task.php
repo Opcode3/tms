@@ -14,8 +14,7 @@ class Task extends BaseModel
      * 0 = Unstarted
      * 1 = In-Progress
      * 2 = Completed
-     * 3 = In-Progress with Message
-     * 4 = Finished
+     * 3 = Finished
      */
 
     function __construct(DatabaseHandler $databaseHandler)
@@ -29,10 +28,10 @@ class Task extends BaseModel
 
     function createTask(array $payload)
     {
-        if ($this->isProject($payload["_title"], $payload["task_project_id"]) === true) {
+        if ($this->isTask($payload["_title"], $payload["_project_id"]) === true) {
             $sql = "INSERT INTO $this->table_name(task_slug, task_project_id, task_title, task_desc, assigned_to, created_by, deadline) 
                     VALUES(:_slug, :_project_id, :_title, :_desc, :_assigned_to, :_created_by, :_deadline)";
-            return $this->insert($sql, $payload, "_slug");
+            return $this->insertOutputId($sql, $payload, "_slug");
         }
         return "exist";
     }
@@ -71,9 +70,40 @@ class Task extends BaseModel
         return $response;
     }
 
+    function fetchTaskBySlug(string $slug)
+    {
+        $sql = "SELECT $this->table_name.*, users_tb.user_fullname, users_tb.user_username, users_tb.user_picture FROM $this->table_name LEFT JOIN users_tb ON $this->table_name.assigned_to = users_tb.user_id WHERE task_slug = ?";
+        $response = $this->fetch($sql, [$slug]);
+        return $response;
+    }
 
 
-    function isProject(string $title, string $project_id): bool
+    function fetchTaskByCreator(int $_id)
+    {
+        $sql = "SELECT $this->table_name.* FROM $this->table_name LEFT JOIN users_tb ON $this->table_name.created_by = users_tb.user_id WHERE created_by = ?";
+        $response = $this->fetchMany($sql, [$_id]);
+        return $response;
+    }
+
+
+
+    function fetchMyAssignedTask(int $_id)
+    {
+        $sql = "SELECT $this->table_name.*, users_tb.user_fullname, users_tb.user_username, users_tb.user_picture FROM $this->table_name LEFT JOIN users_tb ON $this->table_name.assigned_to = users_tb.user_id WHERE assigned_to = ?";
+        $response = $this->fetchMany($sql, [$_id]);
+        return $response;
+    }
+
+    function fetchMyAssignedTaskByProjectId(int $project_id, int $user_id)
+    {
+        $sql = "SELECT $this->table_name.*, users_tb.user_fullname, users_tb.user_username, users_tb.user_picture FROM $this->table_name LEFT JOIN users_tb ON $this->table_name.assigned_to = users_tb.user_id WHERE assigned_to = ? AND task_project_id = ?";
+        $response = $this->fetchMany($sql, [$user_id, $project_id]);
+        return $response;
+    }
+
+
+
+    function isTask(string $title, string $project_id): bool
     {
         $sql = "SELECT task_slug from $this->table_name WHERE task_title = ? AND task_project_id = ?";
         $stmt = $this->query($sql, [$title, $project_id]);

@@ -1,5 +1,5 @@
 <?php
-$path = "/tms";
+$path = "";
 
 ?>
 <!DOCTYPE html>

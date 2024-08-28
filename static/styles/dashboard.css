@@ -152,6 +152,13 @@ body .container aside nav ul li:hover {
   background: rgba(0, 123, 255, 0.08);
 }
 
+body .container aside nav ul li .submenu {
+  color: #d1e5fa;
+  font-size: 12px;
+  padding: 15px 18px 4px 18px;
+  font-weight: 300;
+}
+
 body .container aside nav ul li a {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -722,6 +729,41 @@ body .container main .content #statistics ul li .line {
   background: #0056b3;
 }
 
+body .container main .content #extra-menu ul {
+  margin: 0;
+  padding: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 20px;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+body .container main .content #extra-menu ul li {
+  list-style-type: none;
+  display: block;
+}
+
+body .container main .content #extra-menu ul li a,
+body .container main .content #extra-menu ul li button {
+  padding: 10px 17px;
+  border-radius: 6px;
+  background-color: #d5d7d7;
+  color: #333;
+  display: block;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+body .container main .content #extra-menu ul li button {
+  background-color: #981a01;
+  color: #fff;
+  cursor: pointer;
+}
+
 body .container main .content #list ul {
   margin: 0;
   padding: 0;
@@ -1106,8 +1148,9 @@ body .container main .content #project-details ul li p {
   }
 }
 
-body .container main .content #project-details a {
+body .container main .content #project-details button {
   padding: 12px 15px;
+  outline: none;
   border-radius: 8px;
   font-weight: 300;
   display: -webkit-box;
@@ -1121,22 +1164,24 @@ body .container main .content #project-details a {
   width: -moz-fit-content;
   width: fit-content;
   margin-top: 24px;
+  border: none;
   -webkit-transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
   transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+  cursor: pointer;
   background: #b31e00;
 }
 
-body .container main .content #project-details a:hover {
+body .container main .content #project-details button:hover {
   background: #981a01;
 }
 
-body .container main .content #project-details a span {
+body .container main .content #project-details button span {
   color: #fff;
   font-size: 15px;
   font-weight: 300;
 }
 
-body .container main .content #project-details a svg {
+body .container main .content #project-details button svg {
   stroke: #fff;
   width: 20px;
 }
@@ -1357,6 +1402,7 @@ body .container main .content #progress #tabs .tab-item ul li .li_task .users ul
           box-shadow: 0px 0px 2px 1px rgba(51, 51, 51, 0.24);
   border-radius: 30px;
   overflow: hidden;
+  color: #fbfdff;
 }
 
 body .container main .content #progress #tabs .tab-item ul li .li_task .users ul li .image_holder img {
@@ -1768,6 +1814,10 @@ input[type="checkbox"]:checked
   display: block;
 }
 
+body .container main .content #task .tabs .task_tab_details .task_subtask ul .checked p {
+  text-decoration: line-through;
+}
+
 body .container main .content #task .tabs .task_tab_details .task_comment ul,
 body .container main .content #task .tabs .task_tab_details .task_message ul {
   margin: 0;
@@ -2114,6 +2164,33 @@ body .container main .content #task .extra_info .info_list span {
   color: #333;
 }
 
+body .container main .content #task .extra_info .info_list .action_list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+body .container main .content #task .extra_info .info_list .action_list a {
+  font-size: 14px;
+  background: #0056b3;
+  color: white;
+  padding: 8px 16px;
+  -webkit-transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border-radius: 4px;
+}
+
+body .container main .content #task .extra_info .info_list .action_list a:hover {
+  background-blend-mode: hard-light;
+}
+
+body .container main .content #task .extra_info .info_list .action_list a:last-child() {
+  background-color: #4caf50;
+}
+
 body .container main .content #task .extra_info .info_list strong,
 body .container main .content #task .extra_info .info_list label,
 body .container main .content #task .extra_info .info_list a {
@@ -2141,7 +2218,7 @@ body .container main .content #task .extra_info .info_list a {
 }
 
 body .container main .content #task .extra_info .info_list a svg {
-  width: 24px;
+  width: 20px;
 }
 
 body .container main #setting {
@@ -2513,6 +2590,51 @@ body .container .formControl input:focus {
           box-shadow: 0 0 4px 1px rgba(0, 86, 179, 0.4);
 }
 
+body .container .formControl textarea,
+body .container .formControl select {
+  outline: none;
+  border: none;
+  width: calc(100% - 28px);
+  font-size: 15px;
+  padding: 12px 14px;
+  font-weight: 300;
+  border-radius: 6px;
+  -webkit-transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-weight: 300;
+  -webkit-box-shadow: 0 0 1px 1px #dbdbdb;
+          box-shadow: 0 0 1px 1px #dbdbdb;
+}
+
+@media screen and (max-width: 768px) {
+  body .container .formControl textarea,
+  body .container .formControl select {
+    padding: 10px 12px;
+    font-size: 13px;
+    border-radius: 4px;
+    width: calc(100% - 24px);
+  }
+}
+
+@media screen and (max-width: 420px) {
+  body .container .formControl textarea,
+  body .container .formControl select {
+    padding: 8px 10px;
+    font-size: 11px;
+    border-radius: 3px;
+  }
+}
+
+body .container .formControl textarea:focus,
+body .container .formControl select:focus {
+  -webkit-box-shadow: 0 0 4px 1px rgba(0, 86, 179, 0.4);
+          box-shadow: 0 0 4px 1px rgba(0, 86, 179, 0.4);
+}
+
+body .container .formControl select {
+  width: 100%;
+}
+
 body .container .formControl button {
   width: -webkit-fit-content;
   width: -moz-fit-content;
@@ -2652,7 +2774,7 @@ body #modal .modal-add-task form .formControl textarea,
 body #modal .modal-add-task form .formControl select {
   outline: none;
   border: none;
-  width: 100%;
+  width: calc(100% - 28px);
   font-size: 15px;
   padding: 12px 14px;
   font-weight: 300;
@@ -2671,6 +2793,7 @@ body #modal .modal-add-task form .formControl select {
     padding: 10px 12px;
     font-size: 13px;
     border-radius: 4px;
+    width: calc(100% - 24px);
   }
 }
 

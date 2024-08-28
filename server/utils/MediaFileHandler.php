@@ -15,7 +15,7 @@ class MediaFileHandler
 
     function __construct()
     {
-        // $this->mediaService = new MediaService();
+        $this->mediaService = new MediaService();
         if (!file_exists($this->base_url)) {
             mkdir($this->base_url, 0777, true);
         }
@@ -33,23 +33,28 @@ class MediaFileHandler
 
     public function multipleFileUpload($files): bool
     {
-        $file_count = count($files["name"]);
-        for ($index = 0; $index < $file_count; $index++) {
-            $this->imageProcessor($files["tmp_name"][$index], $files["name"][$index]);
+        if (is_array($files["name"])) {
+
+            $file_count = count($files["name"]);
+            for ($index = 0; $index < $file_count; $index++) {
+                $this->imageProcessor($files["tmp_name"][$index], $files["name"][$index]);
+            }
+            return count($this->dest_url) > 0;
         }
-        return count($this->dest_url) > 0;
+        $this->dest_url = [""];
+        return true;
     }
 
 
-    public function sealUpload(int $resource_id): bool // Old
+    public function sealUpload(int $task_id): bool // Old
     {
         // upload dest_url to media table
         $status = false;
         foreach ($this->dest_url as $key => $url) {
             # call the upload media service
             $payload = array(
-                "media_resource_id" => $resource_id,
-                "media_url" => $url
+                "_task_id" => $task_id,
+                "_path" => $url
             );
             $status = $this->mediaService->setMedia($payload);
         }

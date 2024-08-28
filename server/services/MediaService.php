@@ -22,14 +22,11 @@ class MediaService implements MediaServiceImpl
     {
         $response = $this->model->createMedia($data);
         return $response;
-        // TODO: Remove later
-        // return ResponseDto::json("New user account registration was successful!", 201);
-        // return ResponseDto::json("An error was encountered while trying to register user details!", 500);
     }
 
-    function getMedias(): string
+    function getTaskAttachments(int $id): string
     {
-        $response = $this->model->fetchMedias();
+        $response = $this->model->fetchMediaByTaskId($id);
         return ResponseDto::json($response);
     }
 

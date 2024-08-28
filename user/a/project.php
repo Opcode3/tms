@@ -1,5 +1,5 @@
 <?php
-$path = "/tms";
+$path = "";
 $page = "projects";
 
 
@@ -19,8 +19,13 @@ include '../../vendor/autoload.php';
 
 $user = [];
 $project = [];
-
 $members = [];
+$tasks_unstarted = [];
+$tasks_completed = [];
+$tasks_inprogress = [];
+$tasks_finished = [];
+
+$slug = "";
 
 session_start();
 if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SESSION["user"]) && is_array($_SESSION["user"]) && count($_SESSION["user"]) == 9) {
@@ -32,7 +37,9 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
         $slug = $_GET["slug"];
         $res = json_decode($controller->getProjectBySlug($slug), true);
         if ($res["status_code"] == 200 && $res["message"]["project_id"]) {
-            $res_member = json_decode($controller->getProjectMembers($res["message"]["project_id"]), true);
+            $project_id = (int) $res["message"]["project_id"];
+
+            $res_member = json_decode($controller->getProjectMembers($project_id), true);
 
             $members = array_map(function ($item) {
                 return array(
@@ -47,12 +54,57 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
                 "id" => $res["message"]["creator_id"],
                 "username" => $res["message"]["user_username"]
             ));
+            
             $project = $res["message"];
+
+
+            if (isset($_POST["btnAddTask"])) {
+                $title = $_POST["t_title"];
+                $member_id = $_POST["t_members"];
+                $deadline = $_POST["deadline"];
+                $desc = $_POST["t_desc"];
+                $files = $_FILES["attachment"];
+
+                $payload = array(
+                    '_project_id' => $project_id,
+                    '_title' => $title,
+                    '_desc' => $desc,
+                    '_assigned_to' => $member_id,
+                    '_created_by' => $user["user_id"],
+                    '_deadline' => $deadline
+                );
+
+                $task_resp = json_decode($controller->addTaskToProject($payload, $files), true);
+                echo "<script> alert('" . $task_resp["message"] . "'); </script>";
+            }
+
+
+            $task_res = json_decode($controller->getProjectTasksById($project_id), true);
+            if (count($task_res["message"]) > 0) {
+                foreach ($task_res["message"] as $key => $task) {
+                    switch ((int) $task["task_status"]) {
+                        case 1: // inProgress
+                            array_push($tasks_inprogress, $task);
+                            break;
+                        case 2: // completed
+                            array_push($tasks_completed, $task);
+                            break;
+                        case 3: // finished
+                            array_push($tasks_finished, $task);
+                            break;
+                        default: # Unstarted
+                            array_push($tasks_unstarted, $task);
+                            break;
+                    }
+                }
+            }
         }
     } else header("refresh:0; url=./projects.php");
 } else {
     header("location: ../login.php");
 }
+
+
 
 
 
@@ -101,12 +153,19 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
             </header>
             <div class="content">
                 <div id="submenu">
-                    <a href="./edit-project.php?slug=<?php echo isset($project["project_slug"]) ? $project["project_slug"] : ""; ?>">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"></path>
-                        </svg>
-                        <span>Edit Project</span>
-                    </a>
+                    <?php
+                    if ($project["project_status"] != 1) {
+                    ?>
+                        <a href="./edit-project.php?slug=<?php echo isset($project["project_slug"]) ? $project["project_slug"] : ""; ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"></path>
+                            </svg>
+                            <span>Edit Project</span>
+                        </a>
+                    <?php
+                    }
+                    ?>
+
                     <a href="./project-detail.php?slug=<?php echo isset($project["project_slug"]) ? $project["project_slug"] : ""; ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
@@ -120,204 +179,194 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
                         <div class="tab-item">
                             <div class="tab-item-header">
                                 <h3>Unstarted</h3>
-                                <span>2</span>
+                                <span><?php echo count($tasks_unstarted); ?></span>
                             </div>
-                            <ul>
-                                <li>
-                                    <a href="./manage-task.php?slug=abc&task=jkiksk">
-                                        <p class="line-clamp-2">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi sed cupiditate ex doloribus.</p>
+                            <?php
+                            if (count($tasks_unstarted) > 0) {
+                            ?>
+                                <ul>
+                                    <?php
+                                    foreach ($tasks_unstarted as $key => $task) {
+                                    ?>
+                                        <li>
+                                            <a href="./manage-task.php?slug=<?php echo $slug; ?>&task=<?php echo $task["task_slug"]; ?>">
+                                                <p class="line-clamp-2"><?php echo $task["task_title"]; ?></p>
 
-                                        <div class="li_task">
-                                            <div class="users">
-                                                <ul>
-                                                    <li>
-                                                        <div class="image_holder">AC</div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="image_holder">
-                                                            <img src="../../static/images/no-image.png" alt="">
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <span> 2 Days </span>
-                                        </div>
-                                        <label style="background-color: #9382FF;"></label>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="./manage-task.php?slug=abc&task=jkiksk">
-                                        <p class="line-clamp-2">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi sed cupiditate ex doloribus.</p>
-
-                                        <div class="li_task">
-                                            <div class="users">
-                                                <ul>
-                                                    <li>
-                                                        <div class="image_holder">AC</div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="image_holder">
-                                                            <img src="../../static/images/no-image.png" alt="">
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <span> 2 Days </span>
-                                        </div>
-                                        <label style="background-color: #9382FF;"></label>
-                                    </a>
-                                </li>
-                            </ul>
-                            <div id="add_task">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                </svg>
-                                <span>New Task</span>
-                            </div>
+                                                <div class="li_task">
+                                                    <div class="users">
+                                                        <ul>
+                                                            <li>
+                                                                <div class="image_holder">
+                                                                    <?php
+                                                                    $pic = $task["user_picture"];
+                                                                    if ($pic !== NULL && strlen(trim($pic)) > 9) {
+                                                                        echo " <img src='" . Helper::loadImage($pic) . "' alt='' /> ";
+                                                                    } else echo Helper::getInitialNames($task["user_fullname"]);
+                                                                    ?>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <span> 2 Days </span>
+                                                </div>
+                                                <label style="background-color: #9382FF;"></label>
+                                            </a>
+                                        </li>
+                                    <?php
+                                    }
+                                    ?>
+                                </ul>
+                            <?php
+                            }
+                            if ($project["project_status"] == 0) {
+                            ?>
+                                <div id="add_task">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                    <span>New Task</span>
+                                </div>
+                            <?php } ?>
                         </div>
                         <div class="tab-item">
                             <div class="tab-item-header">
                                 <h3>In Progress</h3>
-                                <span style="background-color: #F90594;">2</span>
+                                <span style="background-color: #F90594;"><?php echo count($tasks_inprogress); ?></span>
                             </div>
-                            <ul>
-                                <li>
-                                    <a href="./manage-task.php?slug=abc&task=jkiksk">
-                                        <p class="line-clamp-2">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi sed cupiditate ex doloribus.</p>
 
-                                        <div class="li_task">
-                                            <div class="users">
-                                                <ul>
-                                                    <li>
-                                                        <div class="image_holder">AC</div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="image_holder">
-                                                            <img src="../../static/images/no-image.png" alt="">
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <span> 2 Days</span>
-                                        </div>
-                                        <div class="li_task_status">
-                                            <span class="task_in">Feedback</span>
-                                        </div>
-                                        <label style="background-color: #9382FF;"></label>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="./manage-task.php?slug=abc&task=jkiksk">
-                                        <p class="line-clamp-2">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi sed cupiditate ex doloribus.</p>
-
-                                        <div class="li_task">
-                                            <div class="users">
-                                                <ul>
-                                                    <li>
-                                                        <div class="image_holder">AC</div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="image_holder">
-                                                            <img src="../../static/images/no-image.png" alt="">
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <span> 2 Days</span>
-                                        </div>
-                                        <label style="background-color: #9382FF;"></label>
-                                    </a>
-                                </li>
-                            </ul>
+                            <?php
+                            if (count($tasks_inprogress) > 0) {
+                            ?>
+                                <ul>
+                                    <?php
+                                    foreach ($tasks_inprogress as $key => $task) {
+                                    ?>
+                                        <li>
+                                            <a href="./manage-task.php?slug=<?php echo $slug; ?>&task=<?php echo $task["task_slug"]; ?>">
+                                                <p class="line-clamp-2"><?php echo $task["task_title"]; ?></p>
+                                                <div class="li_task">
+                                                    <div class="users">
+                                                        <ul>
+                                                            <li>
+                                                                <div class="image_holder">
+                                                                    <?php
+                                                                    $pic = $task["user_picture"];
+                                                                    if ($pic !== NULL && strlen(trim($pic)) > 9) {
+                                                                        echo " <img src='" . Helper::loadImage($pic) . "' alt='' /> ";
+                                                                    } else echo Helper::getInitialNames($task["user_fullname"]);
+                                                                    ?>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <span> 2 Days</span>
+                                                </div>
+                                                <div class="li_task_status">
+                                                    <span class="task_in">Feedback</span>
+                                                </div>
+                                                <label style="background-color: #9382FF;"></label>
+                                            </a>
+                                        </li>
+                                    <?php
+                                    }
+                                    ?>
+                                </ul>
+                            <?php
+                            }
+                            ?>
                         </div>
 
                         <div class="tab-item">
                             <div class="tab-item-header">
                                 <h3>Completed</h3>
-                                <span style="background-color: #C5C594;">1</span>
+                                <span style="background-color: #C5C594;"><?php echo count($tasks_completed); ?></span>
                             </div>
-                            <ul>
-                                <li>
-                                    <a href="./manage-task.php?slug=abc&task=jkiksk">
-                                        <p class="line-clamp-2">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi sed cupiditate ex doloribus.</p>
-
-                                        <div class="li_task">
-                                            <div class="users">
-                                                <ul>
-                                                    <li>
-                                                        <div class="image_holder">AC</div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="image_holder">
-                                                            <img src="../../static/images/no-image.png" alt="">
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <span> 2 Days </span>
-                                        </div>
-                                        <div class="li_task_status">
-                                            <span class="task_complete">Awaiting Approval</span>
-                                        </div>
-                                        <label style="background-color: #9382FF;"></label>
-                                    </a>
-                                </li>
-                            </ul>
+                            <?php
+                            if (count($tasks_completed) > 0) {
+                            ?>
+                                <ul>
+                                    <?php
+                                    foreach ($tasks_completed as $key => $task) {
+                                    ?>
+                                        <li>
+                                            <a href="./manage-task.php?slug=<?php echo $slug; ?>&task=<?php echo $task["task_slug"]; ?>">
+                                                <p class="line-clamp-2"><?php echo $task["task_title"]; ?></p>
+                                                <div class="li_task">
+                                                    <div class="users">
+                                                        <ul>
+                                                            <li>
+                                                                <div class="image_holder">
+                                                                    <?php
+                                                                    $pic = $task["user_picture"];
+                                                                    if ($pic !== NULL && strlen(trim($pic)) > 9) {
+                                                                        echo " <img src='" . Helper::loadImage($pic) . "' alt='' /> ";
+                                                                    } else echo Helper::getInitialNames($task["user_fullname"]);
+                                                                    ?>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <span> 2 Days</span>
+                                                </div>
+                                                <div class="li_task_status">
+                                                    <span class="task_complete">Awaiting Approval</span>
+                                                </div>
+                                                <label style="background-color: #9382FF;"></label>
+                                            </a>
+                                        </li>
+                                    <?php
+                                    }
+                                    ?>
+                                </ul>
+                            <?php
+                            }
+                            ?>
                         </div>
                         <div class="tab-item">
                             <div class="tab-item-header">
                                 <h3>Finished</h3>
-                                <span style="background-color: #409594;">2</span>
+                                <span style="background-color: #409594;"><?php echo count($tasks_unstarted); ?></span>
                             </div>
-                            <ul>
-                                <li>
-                                    <a href="./manage-task.php?slug=abc&task=jkiksk">
-                                        <p class="line-clamp-2">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi sed cupiditate ex doloribus.</p>
-
-                                        <div class="li_task">
-                                            <div class="users">
-                                                <ul>
-                                                    <li>
-                                                        <div class="image_holder">AC</div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="image_holder">
-                                                            <img src="../../static/images/no-image.png" alt="">
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <span> 2 Days</span>
-                                        </div>
-                                        <div class="li_task_status">
-                                            <span class="task_done">Done</span>
-                                        </div>
-                                        <label style="background-color: #9382FF;"></label>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="./manage-task.php?slug=abc&task=jkiksk">
-                                        <p class="line-clamp-2">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi sed cupiditate ex doloribus.</p>
-
-                                        <div class="li_task">
-                                            <div class="users">
-                                                <ul>
-                                                    <li>
-                                                        <div class="image_holder">AC</div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="image_holder">
-                                                            <img src="../../static/images/no-image.png" alt="">
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <span> 2 Days </span>
-                                        </div>
-                                        <label style="background-color: #9382FF;"></label>
-                                    </a>
-                                </li>
-                            </ul>
+                            <?php
+                            if (count($tasks_completed) > 0) {
+                            ?>
+                                <ul>
+                                    <?php
+                                    foreach ($tasks_completed as $key => $task) {
+                                    ?>
+                                        <li>
+                                            <a href="./manage-task.php?slug=<?php echo $slug; ?>&task=<?php echo $task["task_slug"]; ?>">
+                                                <p class="line-clamp-2"><?php echo $task["task_title"]; ?></p>
+                                                <div class="li_task">
+                                                    <div class="users">
+                                                        <ul>
+                                                            <li>
+                                                                <div class="image_holder">
+                                                                    <?php
+                                                                    $pic = $task["user_picture"];
+                                                                    if ($pic !== NULL && strlen(trim($pic)) > 9) {
+                                                                        echo " <img src='" . Helper::loadImage($pic) . "' alt='' /> ";
+                                                                    } else echo Helper::getInitialNames($task["user_fullname"]);
+                                                                    ?>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <span> 2 Days</span>
+                                                </div>
+                                                <div class="li_task_status">
+                                                    <span class="task_done">Done</span>
+                                                </div>
+                                                <label style="background-color: #9382FF;"></label>
+                                            </a>
+                                        </li>
+                                    <?php
+                                    }
+                                    ?>
+                                </ul>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
                 </section>
@@ -340,11 +389,11 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
             </div>
             <form action="" method="post" enctype="multipart/form-data">
                 <div class="formControl">
-                    <label for="deadline">Task Title</label>
+                    <label for="t_title">Task Title</label>
                     <input type="text" name="t_title" id="t_title" placeholder="Enter task title" required>
                 </div>
                 <div class="formControl">
-                    <label for="deadline">Assign to:</label>
+                    <label for="t_members">Assign to:</label>
                     <select name="t_members" id="t_members" required>
                         <?php
                         foreach ($members as $key => $member) {
@@ -360,12 +409,12 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
                     <input type="date" required name="deadline" id="deadline">
                 </div>
                 <div class="formControl">
-                    <label for="deadline">Task Description</label>
-                    <textarea name="t_desc" id="t_desc" cols="30" rows="7" required></textarea>
+                    <label for="t_desc">Task Description</label>
+                    <textarea name="t_desc" id="t_desc" cols="30" rows="7"></textarea>
                 </div>
                 <div class="formControl">
                     <label for="attachment">Attachment</label>
-                    <input type="file" multiple required name="attachment" id="attachment">
+                    <input type="file" multiple name="attachment" id="attachment">
                 </div>
                 <div class="formControl">
                     <button type="submit" name="btnAddTask">Add Task</button>
