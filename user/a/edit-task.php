@@ -67,7 +67,12 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
 
 
 
+
+
         $res = json_decode($controller->getTaskBySlug($task_slug), true);
+
+
+        var_dump($res);
         if (count($res["message"]) > 2) {
             $task = $res["message"];
             // $task_id = (int) $res["message"]["task_id"];
@@ -85,9 +90,9 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
             }, $res_member["message"]);
 
             array_unshift($members, array(
-                "title" => 'Creator',
-                "id" => $user["user_id"],
-                "username" => $user["user_username"]
+                "title" => 'Assigned To',
+                "id" => $task["user_id"],
+                "username" => $task["user_username"]
             ));
         }
     } else {

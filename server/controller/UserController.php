@@ -18,11 +18,6 @@ class UserController
         return $this->userService->setUser($payload);
     }
 
-    // function getAdmins()
-    // {
-    //     return $this->userService->getUsers();
-    // }
-
     function userLoginAuthentication(string $email, string $password)
     {
         return $this->userService->userAuthentication($email, $password);

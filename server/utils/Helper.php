@@ -109,31 +109,6 @@ class Helper
         ];
     }
 
-    public static function getContactItems(string $key, array $data)
-    {
-        if (count($data) > 0 && array_key_exists($key, $data)) {
-            return $data[$key];
-        }
-        return "";
-    }
-
-    public static function setPhoneContact(string $key, array $data)
-    {
-        if (count($data) > 0 && array_key_exists($key, $data)) {
-            $phones =  explode(",", $data[$key]);
-            $base = "";
-            foreach ($phones as $key => $phone) {
-                if ($key > 0) {
-                    $base .= ",";
-                }
-                $base .= "<a href='tel:" . $phone . "'>" . $phone . "</a>";
-            }
-            return $base;
-        }
-        return "";
-    }
-
-
     public static function setDesc(array $data)
     {
         if (count($data) > 0) {

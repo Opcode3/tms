@@ -22,8 +22,6 @@ class Task extends BaseModel
         parent::__construct($databaseHandler);
     }
 
-
-
     // Create Task
 
     function createTask(array $payload)

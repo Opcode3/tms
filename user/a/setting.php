@@ -32,9 +32,6 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
         $fullname = $_POST["fullname"];
         $password = $_POST["password"];
 
-
-
-
         if ($controller->getPasswordComparism($user["user_password"], $password)) {
             $payload = array(
                 '_password' => $new_password,

@@ -86,11 +86,10 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
                     <a href="./setting.php">
                         <div class="image_holder">
                             <?php
-                            // $pic = $threat["user_picture"];
-                            // if ($pic !== NULL && strlen(trim($pic)) > 9) {
-                            //     echo " <img src='" . Helper::loadImage($pic) . "' alt='' /> ";
-                            // } else echo Helper::getInitialNames($threat["user_fullname"]);
-                            echo Helper::getInitialNames("Amaka Emmanuel");
+                            $pic = $user["user_picture"];
+                            if ($pic !== NULL && strlen(trim($pic)) > 9) {
+                                echo " <img src='" . Helper::loadImage($pic) . "' alt='' /> ";
+                            } else echo Helper::getInitialNames($user["user_fullname"]);
                             ?>
                         </div>
                     </a>

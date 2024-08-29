@@ -90,11 +90,6 @@ class Project extends BaseModel
 
 
 
-    function updateLike(int $new_like, int $threat_id)
-    {
-        $sql = "UPDATE $this->table_name SET likes = :likes, updated_at = :updatedAt WHERE  threat_id = :threat_id";
-        return $this->update($sql, ["likes" => $new_like, "threat_id" => $threat_id]);
-    }
 
 
     function isProject(string $name, string $creator): bool
