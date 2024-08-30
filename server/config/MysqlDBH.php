@@ -14,11 +14,6 @@ class MysqlDBH implements DatabaseHandler
     private $charset = 'utf8mb4';
     private $connectionString;
 
-    // Remote
-    // private $dbname = "homebest_db";
-    // private $password = "&skJODxVKq1v";
-    // private $username = 'homebest_code';
-
     // private $dbname = "homebest_tms_db";
     // private $password = "}NEUWU36&[~m";
     // private $username = 'homebest_tms_root';
