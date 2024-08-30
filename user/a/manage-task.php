@@ -470,11 +470,14 @@ $activeTab = isset($_SESSION["activeTab"]) ? $_SESSION["activeTab"] : 0;
 
     const btnDeleteTask = document.querySelector("#btnDeleteTask");
 
-    btnDeleteTask.addEventListener('click', function() {
-        if (confirm("Are you sure, you want to delete this task?")) {
-            window.location.href = this.getAttribute('data-href');
-        }
-    });
+    if (btnDeleteTask) {
+        btnDeleteTask.addEventListener('click', function() {
+            if (confirm("Are you sure, you want to delete this task?")) {
+                window.location.href = this.getAttribute('data-href');
+            }
+        });
+    }
+
 
     var storage = window.localStorage;
 
