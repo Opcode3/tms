@@ -43,14 +43,20 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
         $slug = $_GET["slug"];
         $task_slug = $_GET["task"];
 
+
+        if (isset($_GET["action"]) && strlen(trim($_GET["action"])) > 0) {
+            $_task_status = (int) $_GET["action"];
+            if ($_task_status > 0) {
+                $_ts_res = json_decode($controller->modifyTaskStatus($task_slug, $_task_status), true);
+                echo "<script> alert('" . $_ts_res["message"] . "'); </script>";
+            }
+        }
+
+
         $res = json_decode($controller->getTaskBySlug($task_slug), true);
         if (count($res["message"]) > 2) {
             $task = $res["message"];
-
-            // var_dump($task);
-
             $task_id = (int) $res["message"]["task_id"];
-
             $res_attachement = json_decode($controller->getTaskAttachments($task_id), true);
 
             if (isset($res_attachement["message"]) && count($res["message"]) > 0) {
@@ -257,24 +263,39 @@ $activeTab = isset($_SESSION["activeTab"]) ? $_SESSION["activeTab"] : 0;
                                     $prev_task = $task_status - 1;
                                     if ($task_status > 0) {
                                     ?>
-                                        <a href="./manage-task.php?<?php echo "slug=$slug&task=$task_slug&action=$next_task"; ?>">
+                                        <a href="./manage-task.php?<?php echo "slug=$slug&task=$task_slug&action=$prev_task"; ?>">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061A1.125 1.125 0 0 1 21 8.689v8.122ZM11.25 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061a1.125 1.125 0 0 1 1.683.977v8.122Z" />
                                             </svg>
                                             Move to
                                             <?php echo Helper::getTaskAction($prev_task); ?>
                                         </a>
-                                    <?php
+                                        <?php
                                     }
                                     if ($task_status < 3) {
-                                    ?>
-                                        <a href="./manage-task.php?<?php echo "slug=$slug&task=$task_slug&action=$next_task"; ?>">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z" />
-                                            </svg>
-                                            Move to
-                                            <?php echo Helper::getTaskAction($task_status); ?>
-                                        </a>
+
+                                        if ($next_task <= 2) {
+                                        ?>
+                                            <a href="./manage-task.php?<?php echo "slug=$slug&task=$task_slug&action=$next_task"; ?>">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z" />
+                                                </svg>
+                                                Move to
+                                                <?php echo Helper::getTaskAction($next_task); ?>
+                                            </a>
+                                        <?php
+                                        } else if ($next_task == 3 && $user["user_id"] == $task["created_by"]) {
+                                        ?>
+                                            <a href="./manage-task.php?<?php echo "slug=$slug&task=$task_slug&action=$next_task"; ?>">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z" />
+                                                </svg>
+                                                Move to
+                                                <?php echo Helper::getTaskAction($next_task); ?>
+                                            </a>
+                                        <?php
+                                        }
+                                        ?>
                                     <?php } ?>
                                 </div>
                             </div>

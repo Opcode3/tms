@@ -312,14 +312,14 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
                         <div class="tab-item">
                             <div class="tab-item-header">
                                 <h3>Finished</h3>
-                                <span style="background-color: #409594;"><?php echo count($tasks_unstarted); ?></span>
+                                <span style="background-color: #409594;"><?php echo count($tasks_finished); ?></span>
                             </div>
                             <?php
-                            if (count($tasks_completed) > 0) {
+                            if (count($tasks_finished) > 0) {
                             ?>
                                 <ul>
                                     <?php
-                                    foreach ($tasks_completed as $key => $task) {
+                                    foreach ($tasks_finished as $key => $task) {
                                     ?>
                                         <li>
                                             <a href="./manage-task.php?slug=<?php echo $slug; ?>&task=<?php echo $task["task_slug"]; ?>">
@@ -378,7 +378,6 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
     closeMenu.addEventListener("click", function() {
         document.querySelector("aside").classList.toggle("showMenu");
     });
-
 </script>
 
 </html>

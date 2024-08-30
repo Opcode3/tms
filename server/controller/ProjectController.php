@@ -92,6 +92,11 @@ class ProjectController
         return $this->projectService->editTaskBySlug($payload);
     }
 
+    function modifyTaskStatus(string $slug, int $status)
+    {
+        return $this->projectService->editTaskStatusBySlug($slug, $status);
+    }
+
     function getTaskBySlug(string $slug)
     {
         return $this->projectService->getTaskBySlug($slug);

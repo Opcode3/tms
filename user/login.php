@@ -6,7 +6,7 @@ include '../vendor/autoload.php';
 
 $path = "";
 
-$show_text = ["username" => "opcode3"];
+$show_text = ["username" => "chizoba2"];
 if (isset($_POST["btnLogin"])) {
     $username = $_POST["username"];
     $password = $_POST["password"];

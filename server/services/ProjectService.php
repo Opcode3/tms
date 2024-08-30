@@ -230,6 +230,15 @@ class ProjectService implements ProjectServiceImpl
         return ResponseDto::json("We are unable to process this update. Please try again!");
     }
 
+    function editTaskStatusBySlug(string $slug, int $status): string
+    {
+        $response = $this->modelTask->updateTaskStatus($slug, $status);
+        if ($response) {
+            return ResponseDto::json("Task status was updated!", 200);
+        }
+        return ResponseDto::json("We are unable to process this update. Please try again!");
+    }
+
     function getTaskBySlug(string $slug): string
     {
         $response = $this->modelTask->fetchTaskBySlug($slug);

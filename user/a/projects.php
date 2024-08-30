@@ -27,7 +27,22 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
 
 
     $res = json_decode($controller->getCreatorProjects((int) $user['user_id']), true);
-    $projects = $res["message"];
+
+    // var_dump($res);
+
+    if (count($res["message"]) > 0) {
+        foreach ($res["message"] as $key => $value) {
+            if ($value["project_status"] > 0) {
+                array_push($complete_project_index, $value);
+            } else {
+                array_push($projects, $value);
+            }
+
+            // var_dump($value);
+            // echo "<br />";
+        }
+    }
+    // $projects = $res["message"];
 } else {
     header("location: ../login.php");
 }
@@ -97,7 +112,6 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
 
                             <?php
                             foreach ($projects as $key => $project) {
-                                if ($project["project_status"] > 0) continue;
                             ?>
                                 <li>
                                     <a href="./project.php?slug=<?php echo $project["project_slug"]; ?>">
@@ -136,33 +150,46 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
                 <?php
                 }
 
-                if (count($complete_project_index) > 0) {
+                if (count($complete_project_index) > 1000) {
                 ?>
                     <section id="list">
                         <h3>List of Completed Projects</h3>
                         <ul>
-                            <li>
-                                <a href="./project.php?slug=">
-                                    <p class="line-clamp-2">Design the banner for the twitter lead campaign</p>
-                                    <div class="li_task">
-                                        <span>2 Task(s)</span>
-                                        <span>100%</span>
-                                    </div>
-                                    <div class="li_task">
-                                        <div class="users">
-                                            <ul>
-                                                <li>
-                                                    <div class="image_holder">
-                                                        <img src="../../static/images/no-image.png" alt="">
-                                                    </div>
-                                                </li>
-                                            </ul>
+
+                            <?php
+                            foreach ($complete_project_index as $key => $project) {
+                            ?>
+                                <li>
+                                    <a href="./project.php?slug=<?php echo $project["project_slug"]; ?>">
+                                        <p class="line-clamp-2"><?php echo $project["project_name"]; ?></p>
+                                        <div class="ul_task">
+                                            <div class="li_task">
+                                                <span>8 Task(s)</span>
+                                                <span>100%</span>
+                                            </div>
+                                            <div class="li_task">
+                                                <div class="users">
+                                                    <ul>
+                                                        <li>
+                                                            <?php
+                                                            $pic = "ML"; //$project["project_name"];
+                                                            if ($pic !== NULL && strlen(trim($pic)) > 9) {
+                                                                echo " <img src='" . Helper::loadImage($pic) . "' alt='' /> ";
+                                                            } else echo Helper::getInitialNames($project["project_name"]);
+                                                            ?>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <span> <?php echo Helper::formatDate($project["created_at"]); ?> >> <?php echo Helper::formatDate($project["project_deadline"]); ?> </span>
+                                            </div>
                                         </div>
-                                        <span> 01 Aug / 04 Aug </span>
-                                    </div>
-                                    <label></label>
-                                </a>
-                            </li>
+
+                                        <label style="background-color: <?php echo $project["project_color"]; ?>;"></label>
+                                    </a>
+                                </li>
+                            <?php
+                            }
+                            ?>
                         </ul>
                     </section>
                 <?php

@@ -56,14 +56,14 @@ class Helper
     public static function getTaskAction($status)
     {
         switch ((int) $status) {
-            case 0:
-                return "In-Progress";
             case 1:
+                return "In-Progress";
+            case 2:
                 return "Completed";
             case 3:
                 return "Finished";
             default:
-                return "In-Progress";
+                return "Unstarted";
         }
     }
 
