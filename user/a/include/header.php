@@ -27,6 +27,8 @@ foreach ($_res["message"] as $key => $h_project) {
     }
 }
 
+$reoccur = [];
+
 $assigned_task_projects = $assigned_res["message"];
 
 ?>
@@ -109,6 +111,9 @@ $assigned_task_projects = $assigned_res["message"];
                     <ul>
                         <?php
                         foreach ($assigned_task_projects as $key => $_project) {
+                            if (in_array($_project["project_slug"], $reoccur)) continue;
+
+                            array_push($reoccur, $_project["project_slug"]);
                         ?>
                             <li class=" <?php echo $p_item ==  $_project["project_slug"] ? 'active' : ''; ?> ">
                                 <a href="./assigned-project.php?slug=<?php echo $_project["project_slug"]; ?>">
