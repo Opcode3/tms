@@ -261,7 +261,7 @@ $activeTab = isset($_SESSION["activeTab"]) ? $_SESSION["activeTab"] : 0;
                                     <?php
                                     $next_task = $task_status + 1;
                                     $prev_task = $task_status - 1;
-                                    if ($task_status > 0) {
+                                    if ($task_status > 0 && $task_status < 3) {
                                     ?>
                                         <a href="./manage-task.php?<?php echo "slug=$slug&task=$task_slug&action=$prev_task"; ?>">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -296,7 +296,18 @@ $activeTab = isset($_SESSION["activeTab"]) ? $_SESSION["activeTab"] : 0;
                                         <?php
                                         }
                                         ?>
-                                    <?php } ?>
+                                    <?php }
+                                    if ($task_status == 3) {
+                                    ?>
+                                        <a href="" style="background-color: green;">
+                                            <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"></path>
+                                            </svg>
+                                            Task is Done
+                                        </a>
+                                    <?php
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>

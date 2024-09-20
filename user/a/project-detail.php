@@ -53,6 +53,7 @@ if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"] && isset($_SES
 
         if (count($res["message"]) > 0 && isset($res["message"]["project_id"])) {
             $project = $res["message"];
+
             $res_members = json_decode($controller->getProjectMembers($project["project_id"]), true);
             $members = $res_members["message"];
 
